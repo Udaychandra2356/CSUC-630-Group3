@@ -1,7 +1,36 @@
+Udaychandra gollapally
+
 Team Building Exercise #1
 
 Pavan Sesha Sai Kasukurti
 
-I can eat 4000 calories in a day 
-I can dance well 
-I have jumped from the tallest building in the world 
+Entries:
+True:  I can eat 4000 calories in a day 
+True:  I can dance well 
+False: I have jumped from the tallest building in the world 
+
+Guesses:
+I guess #3 of Uday is the lie because reciting the alphabet backward is a rare skill.
+I guess #2 of Lokesh is the lie because bee stings are so common
+I guess #2 of Rikwith is the lie because weddings are so common.
+
+Entries:
+True:I’ve been to every continent except Antarctica.
+True:I’ve never watched a single episode of Game of Thrones.
+False:I can recite the alphabet backward in under 10 seconds.
+
+Guesses:
+I guess Pavan #3 is the lie because he previously told he has fear of heights.
+I guess lokesh #3 is the lie because holding a handstand for 30 seconds is difficult.
+I guess Rikwith #3 is the lie because i see him on phone everytime.
+
+Lokesh Repala
+
+True:  I’ve been in a hot air balloon.
+True:  I’ve never been stung by a bee.
+False: I can do a handstand for 30 seconds.
+
+I guess #2 of Uday is the lie because Game of Thrones is so popular.
+I guess #3 of Pavan is the lie because Once he told that he've never been to Dubai
+I guess #1 of Rikwith is the lie because meeting a Nobel Prize winner is a big claim.
+
