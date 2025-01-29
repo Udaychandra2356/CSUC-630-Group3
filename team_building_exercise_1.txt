@@ -1,4 +1,15 @@
 Sai Rikwith Daggu
-I've been to NASA Headquarters.
-I'am a professional Bollywood dancer.
-I hat playing video games.
+
+Team Building Exercise #1
+
+Entries:
+
+True: I've been to NASA Headquarters.
+False: I'm a professional Bollywood dancer.
+True: I hate playing video games.
+
+Guesses:
+
+I guess Uday's first one is a lie because it's a big claim.
+I guess Pavan's first one is a lie because 4,000 calories a day is too much, I think.
+I guess Lokesh's first one is a lie because I remember him telling me he has a fear of heights.
