@@ -10,3 +10,14 @@ Guesses:
 I guess Pavan #3 is the lie because he previously told he has fear of heights.
 I guess lokesh #3 is the lie because holding a handstand for 30 seconds is difficult.
 I guess Rikwith #3 is the lie because i see him on phone everytime.
+
+Lokesh Repala
+
+True:  I’ve been in a hot air balloon.
+True:  I’ve never been stung by a bee.
+False: I can do a handstand for 30 seconds.
+
+I guess #2 of Uday is the lie because Game of Thrones is so popular.
+I guess #3 of Pavan is the lie because Once he told that he've never been to Dubai
+I guess #1 of Rikwith is the lie because meeting a Nobel Prize winner is a big claim.
+
