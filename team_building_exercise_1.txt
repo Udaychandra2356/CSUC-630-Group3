@@ -1,9 +1,12 @@
+Udaychandra gollapally
+
 Team Building Exercise #1
 Entries:
+True:I’ve been to every continent except Antarctica.
+True:I’ve never watched a single episode of Game of Thrones.
+False:I can recite the alphabet backward in under 10 seconds.
 
-I’ve been to every continent except Antarctica.
-
-I’ve never watched a single episode of Game of Thrones.
-
-I can recite the alphabet backward in under 10 seconds.
-
+Guesses:
+I guess Pavan #3 is the lie because he previously told he has fear of heights.
+I guess lokesh #3 is the lie because holding a handstand for 30 seconds is difficult.
+I guess Rikwith #3 is the lie because i see him on phone everytime.
