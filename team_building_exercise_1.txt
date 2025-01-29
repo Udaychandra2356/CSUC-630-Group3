@@ -17,6 +17,19 @@ I guess Lokesh's first one is a lie because I remember him telling me he has a f
 Udaychandra gollapally
 
 Team Building Exercise #1
+
+Pavan Sesha Sai Kasukurti
+
+Entries:
+True:  I can eat 4000 calories in a day 
+True:  I can dance well 
+False: I have jumped from the tallest building in the world 
+
+Guesses:
+I guess #3 of Uday is the lie because reciting the alphabet backward is a rare skill.
+I guess #2 of Lokesh is the lie because bee stings are so common
+I guess #2 of Rikwith is the lie because weddings are so common.
+
 Entries:
 True:I’ve been to every continent except Antarctica.
 True:I’ve never watched a single episode of Game of Thrones.
