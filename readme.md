@@ -13,3 +13,7 @@ sdaggu@csuchico.edu
 **Pavan Sesha Sai Kasukurti**
 
 pkasukurti@csuchico.edu
+
+**Kadyn S Martinez**
+
+ksmartinez2csuchico.edu
