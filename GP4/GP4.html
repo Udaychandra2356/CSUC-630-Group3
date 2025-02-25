@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>GP4&colon; Detailed UI Prototype Feedback Report</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="gp4-detailed-ui-prototype-feedback-report">GP4: Detailed UI Prototype Feedback Report</h1>
+<h4 id="authors">Authors:</h4>
+<p>Kadyn Martinez - Uday Chandra Gollapally - Lokesh Repala - Sai Rikwith Daggu - Pavan Sesha Sai Kasukurti</p>
+<h4 id="date-2232025">Date: 2/23/2025</h4>
+<br>
+<h2 id="executive-summary">Executive Summary</h2>
+<!-- Objective: Briefly summarize the purpose of the feedback report and the main findings.
+
+Overview of the Reviewed Prototype: Provide a quick overview of the prototype you reviewed, mentioning its intended purpose and target audience. -->
+<p><strong>Objectiveー</strong> The following report is focused on the review and evaluation of the Habit Tracker application prototype by Team 4. The purpose of the report is to** perform a usability analysis** of the prototype demonstrated via video. By performing a usability analysis, our <strong>teams are better equipped</strong> to <strong>meet user satisfaction</strong> requirements as well as <strong>enable preventative design</strong> tactics reducing user error. Our methodology was to perform a <strong>frame-by-frame analysis</strong> of prototype video and come up with feedback. Feedback ranged from <strong>minor inconveniences</strong> for the user to more <strong>critical error prone design patterns</strong> which <strong>reduce user satisfaction</strong>.</p>
+<p><strong>Areas of strength</strong> are pointed out such as <strong>cohesive design style</strong> as well as a solid foundation to achieve <strong>core functionality</strong>. These areas are listed alongside <strong>areas requiring improvement</strong> such as <strong>button placement</strong> and visual consistency where there should be a <strong>visual split to demonstrate differing functionality</strong>. Finally a list of <strong>prioritized recommendations</strong> is given for the team to iterate on. All feedback is provided based on <strong>empirical examination</strong> in view of the <strong>10 usability heuristics</strong>.</p>
+<p><strong>Overview of the Reviewed Prototypeー</strong> The reviewed application in question is a habit tracking application aptly named &quot;<strong>Habit Tracker.</strong>&quot; The application is intended to be a comprehensive way to build habits by allowing the user to <strong>designate time on a calendar</strong> to perform the activity which the habit involves. The expectation is that performing this activity over some period of time (with the help of the tracker) will allow the user to stay motivated to continue the habit. The tracker does this with alarms, a &quot;todo list&quot; view, and analytics spanning multiple time frames enabling the user to see concrete progress over time.</p>
+<h2 id="methodology">Methodology</h2>
+<!-- Approach to Review: Describe how your group conducted the review. Include the aspects you focused on, such as usability,  functionality, etc
+Tools and Techniques Used: Mention any specific tools (if any) or techniques used during the review process, such as heuristic evaluation, usability testing, or any checklist adhered to. -->
+<p>Our approach to review involved analyzing the video provided and focusing on aspects of usability, primarily as it pertains to Jakob Nielsen's 10 Usability Heuristics. Due to the lack of portable interactivity, we are unable to provide a first person perspective usability testing. We will instead evaluate from a third person perspective as was demonstrated in the video. We will also employ a frame by frame analysis which will be used to extend constructive feedback by giving tangible screenshot examples.</p>
+<h2 id="detailed-feedback">Detailed Feedback</h2>
+<h3 id="usability">Usability</h3>
+<!-- Navigation: Comment on the ease of navigation and finding information.
+User Experience: Evaluate how intuitive and logical the user experience is from start to finish. -->
+<h4 id="navigation">Navigation</h4>
+<p>The look is very simple and easy to understand. Navigation options are provided in a smart way, making sure to not confuse the user. Large icons and target areas provide adequate breathing room allowing users to easily digest options and paths within the interface.
+<img src="file:///d:\School\GRAD\CSCI_630_SoftwareDesign\CSUC-630-Group3\GP4\LargeNavIcons.png" alt="image"></p>
+<p>A large majority of the navigation is done via pop up modals which provide the user with a grounded view (root page) and child modals above the grounded view. While intuitive, its important to not let these modals stack as it can be frustrating to have a modal covered up.</p>
+<table>
+<thead>
+<tr>
+<th>First Modal</th>
+<th>Overlapping / Overwriting modal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="file:///d:\School\GRAD\CSCI_630_SoftwareDesign\CSUC-630-Group3\GP4\LargeNavIcons.png" alt="image"></td>
+<td><img src="file:///d:\School\GRAD\CSCI_630_SoftwareDesign\CSUC-630-Group3\GP4\overlappingmodal.png" alt="img"></td>
+</tr>
+</tbody>
+</table>
+<p>In the above sequence of navigation, there is a nested modal wherein it is implied there can be navigation between the two. The implication is made due to the &quot;back&quot; button being present on the right modal. However its unclear if the &quot;X&quot; on top would accomplish the same, or if the modal replaced the previous. This could be one area of possible improvement that will be discussed later.</p>
+<h4 id="user-experience">User Experience</h4>
+<p>In terms of User Experience, the prototype performs well, logically moving from creation to data collection to finally displaying the newly created habit. These are minor demerits that can be discussed in regards to user experience.</p>
+<table>
+<thead>
+<tr>
+<th>Interactive View</th>
+<th>Analytics View</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="file:///d:\School\GRAD\CSCI_630_SoftwareDesign\CSUC-630-Group3\GP4\InteractionView.png" alt="image"></td>
+<td><img src="file:///d:\School\GRAD\CSCI_630_SoftwareDesign\CSUC-630-Group3\GP4\AnalyticsView.png" alt="img"></td>
+</tr>
+</tbody>
+</table>
+<p>The other area of possible contention would be that analytics and interaction are absorbed into the same view. This is exemplified in the side-by-side above. By switching the functionality within the same view and widgets, this can cause friction for the user.</p>
+<h3 id="functionality">Functionality</h3>
+<!-- Completeness: Assess the degree to which the prototype completely exposes the features and user interactions as defined in the Project Proposal's requirements. 
+Core Features: Assess whether the core features work as expected and fulfill the Project Proposal's requirements.
+Interactivity: Evaluate the interactivity of the prototype, including button responses, transitions, and animations.
+Performance: Note any issues related to the prototype's performance, such as lag or unresponsive elements. -->
+<h4 id="completeness">Completeness</h4>
+<p>To prototype as disclosed fulfils all the major requirements of the project proposal. Going further to have unique and engaging visualizations. There are however some minor objections to this point disclosed below.</p>
+<ul>
+<li>There were not at least 12 pre-defined habits, instead one was copy pasted.</li>
+<li>There were not any descriptions within the habits, unless &quot;15 minutes a day&quot; counted, however this feels more like a time dedication than description of the activity.</li>
+<li>There was no visibly disclosed way to allow users to schedule the same habit multiple times per day.</li>
+<li>There does not seem to be any display of completion percentages, how many minutes were spent per task is only shown.</li>
+</ul>
+<h4 id="core-features">Core Features</h4>
+<p>Core features relating to the actual use of the prototype are present, users are able to successfully create habits, register habits, complete habits. Removal is demonstrated within the edit screen, as well as adjustment of data within the habit.</p>
+<h4 id="interactivity">Interactivity</h4>
+<p>Since interactivity is gauged via video, and implementation is performed via design tool prototype features, this section isn't applicable for evaluation.</p>
+<h4 id="performance">Performance</h4>
+<p>Since interactivity is gauged via video, and implementation is performed via design tool prototype features, this section isn't applicable for evaluation.</p>
+<h3 id="general-observations">General Observations</h3>
+<!-- Strengths: Highlight the strengths of the prototype, pointing out what aspects were particularly well-executed.
+Areas for Improvement: Identify areas where the prototype could be improved, providing specific, actionable suggestions.
+(Incorporate the "Jakob Nielsen’s 10 Usability Heuristics" (from the Week 3 lecture content) into your evaluation). -->
+<h4 id="strengths">Strengths</h4>
+<p>The following points are areas in which the prototype excelled in.</p>
+<ul>
+<li>Clean Interface
+<ul>
+<li>The interface demonstrated is nicely laid out, following a minimalist flat color style that's cohesive and enjoyable to operate.</li>
+</ul>
+</li>
+<li>Simplistic Design
+<ul>
+<li>Few buttons and navigation paths leave less chance for user error, a static navigation bar gives users a place to ground themselves to familiar views.</li>
+</ul>
+</li>
+<li>Cards / Tiles</li>
+<li>Use of Cards / Tiles in design allow for recognition over time. Having habits occupy cards/tiles as demonstrated lets users know how to interact with familiar interfaces even if they are newly presented features.</li>
+<li>Visualizations
+<ul>
+<li>Graphical visualizations throughout make the UI more approachable.</li>
+</ul>
+</li>
+</ul>
+<h4 id="areas-of-improvement">Areas of Improvement</h4>
+<p>The following points are areas in which the prototype improves. These will be provided through the lens of Jakob Nielsen's 10 Usability Heuristics.</p>
+<ul>
+<li>Visibility of system status
+<ul>
+<li>Though not demonstrated in the video prototype, consider adding a toast notification when creating and removing a habit to show visibility of internal status.</li>
+</ul>
+</li>
+<li>User control and freedom
+<ul>
+<li>Adding and removing habits is a simplified process however there was no demonstrated method to undo a deletion of a card other than refilling all the information. Consider adding an undo feature or &quot;archiving&quot; a habit to be restored later.</li>
+</ul>
+</li>
+<li>Consistency and standards
+<ul>
+<li>Cards are used in the &quot;Manage Habits&quot; section with a <em>delete</em> button, but then in the &quot;Habit Tracker&quot; view with a <em>complete</em> button. This breaks consistency between the cards. Consider adding a second button or having edit be a different interaction.</li>
+<li>Cards are reused in the &quot;Today-Week-Month-Year&quot; view, however, in the &quot;Week-Month-Year&quot; views cards lose their ability to complete. While this makes logical sense, the reuse of standards here has the potential to cause disconnect. Consider using a different display method to separate these views.</li>
+</ul>
+</li>
+<li>Error prevention
+<ul>
+<li>Logout button in the navigation menu is in between other items which are clicked. This has the potential to lead to user error. Consider moving this to the right hand side so as to be separated from the normal navigational options.</li>
+</ul>
+</li>
+<li>Aesthetic and minimalist design
+<ul>
+<li>The aesthetic is consistent and minimalist, however the completion tracker diverges from the design and style of the rest of the application. Consider using flat colors and more aesthetic presentation for analytical graphs.</li>
+</ul>
+</li>
+<li>Help users recognize, diagnose, and recover from errors
+<ul>
+<li>While not demonstrated in the video, consider adding a toast notification for errors to allow users to diagnose issues.</li>
+</ul>
+</li>
+<li>Help and documentation
+<ul>
+<li>While not demonstrated in the video, consider adding a help page or an introduction tutorial to using the site guiding the user through basic actions.</li>
+</ul>
+</li>
+</ul>
+<h2 id="suggested-improvements">Suggested Improvements</h2>
+<!-- Prioritized Recommendations: Offer a prioritized list of recommendations for improvement. This could range from quick wins to more significant changes that might require more time and resources.
+Justification: Provide justification for each recommendation, explaining how it would enhance the prototype's usability, design, or functionality. -->
+<h3 id="prioritized-recommendations">Prioritized Recommendations</h3>
+<p>The below points are recommendations which should be prioritized to achieve the most value in terms of user satisfaction. Some suggestions are small in scope, others might require larger allocation of resources. This is not an exhaustive list but instead key discussion points which could be used to enhance the prototype's usability, design, and functionality.</p>
+<ol>
+<li>Prevent nested modals
+<ul>
+<li>Preventing nested modals as seen above will help keep the UI clean and organized both for development as well as users. If a modal goes missing or a user is unable to return to the modal they want, it can cause friction.</li>
+</ul>
+</li>
+<li>Change tiles in the analytics / completion view
+<ul>
+<li>Habit tiles are reused in the &quot;completion&quot; view but also the analytics view. There are differences in how these are intended to be used but the visuals remain similar. It's also seemingly easy to click between these views as the analytics are provided in the same &quot;tab header&quot; as the &quot;today&quot; tab. By incorporating a different visual language, the user is less likely to be confused, therefore enhancing the usability of the application.</li>
+</ul>
+</li>
+<li>Account for mistaken habit deletion
+<ul>
+<li>Set forth a method or process for undoing a deletion as currently the process to reenable a deleted task is to reinput the information from scratch. This might also lose the previously obtained analytics if handled recklessly. Implementing this would make for a more cohesive and thought out user experience.</li>
+</ul>
+</li>
+<li>Relocate the logout button
+<ul>
+<li>Currently the logout button is between pages which would be used during active use. This forces the user to always be weary of clicking the wrong button thereby reducing user acclimation to the interface.</li>
+</ul>
+</li>
+<li>Remove habit creation multiselect UI elements
+<ul>
+<li>Select checker box makes little sense in the context of browsing curated habits, perhaps switching to clicking on the tile altogether would avoid user ambiguity.</li>
+</ul>
+</li>
+<li>Analytics graph visual cohesion
+<ul>
+<li>Change analytics graph views to be more in line with the overall style</li>
+</ul>
+</li>
+<li>Password confirmation
+<ul>
+<li>Have the user confirm their password in the signup section. If a new user is created without confirming their password and there was a typo in creation, the user will be locked out of their account with little recourse other than to follow the password recovery procedure.</li>
+</ul>
+</li>
+</ol>
+<h2 id="conclusions">Conclusions</h2>
+<!-- Summarize the key points from the feedback, reiterating the most critical improvements suggested. -->
+<p>In conclusion, the Habit tracker demonstrated by group 4's prototype video follows the required specifications closely. Many of the major usability heuristics are met and exceeded. It is not without fault however as certain areas relating to navigation and functionality have room for improvement. This feedback comes with the broad knowledge that the prototype built with design-tool prototyping functionality can only perform so well. Future suggestions would be easier with a more tangible demonstration of the application in &quot;MVP&quot; form.</p>
+
+            
+            
+        </body>
+        </html>
