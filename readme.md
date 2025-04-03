@@ -2,7 +2,6 @@
 -**Habits Tracker**
 
 ## Team Members
-
 - **Udaychandra Gollapally**  
   Email: [ugollapally@csuchico.edu](mailto:ugollapally@csuchico.edu)
 
