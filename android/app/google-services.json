@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "265607603336",
+    "project_id": "habitstacker-6f7a1",
+    "storage_bucket": "habitstacker-6f7a1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:265607603336:android:9818ed9854293cd328ab3d",
+        "android_client_info": {
+          "package_name": "com.example.habitstacker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8Exny8kpuJvYVteUq45nkB_W_wkn_Dlg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
