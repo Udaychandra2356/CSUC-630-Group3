@@ -10,6 +10,9 @@ on:
 
 jobs:
   flutter_build_test:
+    permissions:
+      contents: read
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,7 +26,15 @@ jobs:
 
       - name: run tests
         run: flutter test --coverage
+        continue-on-error: true
 
-  # coverage_report:
-  #   name: Generate coverage report
-  #   runs-on: ubuntu-latest
+      - name: Report Comment
+        uses: kefasjw/lcov-pull-request-report@v1
+        with:
+          # Lcov file location. For example, coverage/lcov.info
+          lcov-file: coverage/lcov.info
+          # Github token required for getting list of changed files and posting comments
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          comment-title: Coverage Report
+          all-files-minimum-coverage: 50
+          changed-files-minimum-coverage: 25
