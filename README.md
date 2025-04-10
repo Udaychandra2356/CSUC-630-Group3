@@ -1,5 +1,5 @@
 # Project Name
--**Habits Tracker**
+-**Habit Stacker**
 
 ## Team Members
 - **Udaychandra Gollapally**  
