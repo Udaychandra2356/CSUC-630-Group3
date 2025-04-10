@@ -1,16 +1,30 @@
-# habitstacker
+# Project Name
+-**Habits Tracker**
 
-A new Flutter project.
+## Team Members
+- **Udaychandra Gollapally**  
+  Email: [ugollapally@csuchico.edu](mailto:ugollapally@csuchico.edu)
 
-## Getting Started
+- **Lokesh Repala**  
+  Email: [lrepala@csuchico.edu](mailto:lrepala@csuchico.edu)
 
-This project is a starting point for a Flutter application.
+- **Sai Rikwith Daggu**  
+  Email: [sdaggu@csuchico.edu](mailto:sdaggu@csuchico.edu)
 
-A few resources to get you started if this is your first Flutter project:
+- **Pavan Sesha Sai Kasukurti**  
+  Email: [pkasukurti@csuchico.edu](mailto:pkasukurti@csuchico.edu)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Kadyn S Martinez**  
+  Email: [ksmartinez2@csuchico.edu](mailto:ksmartinez2@csuchico.edu)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## Project Documents
+
+- [Project Proposal](https://docs.google.com/document/d/1noR2o-xw3F_8FYlLgwgOMpxDMaihEWDJoM5ENnvKViI/edit?usp=sharing)
+- [Internal Design](https://docs.google.com/document/d/1o77e0aQM8MId-ny01n-hBcNe4JH4pgo8URsi4KklKXk/edit?usp=sharing)
+- [External Design: Choosing Project UI design](https://docs.google.com/document/d/1N61ji1pEtPXPback4XL5FFPGVS5h_t6zyr92Pk-Kodg/edit?usp=sharing)
+- [Unit Testing](https://docs.google.com/document/d/1gda6nRzGb7_OFW5v-Jnd26IN6n47YF7cexV6N4w1AAA/edit?usp=sharing)
+- [Product Backlog](In progress..)
+
+---
