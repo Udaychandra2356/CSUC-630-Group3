@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+class MyProfileScreen extends StatelessWidget {
+  const MyProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,10 +11,10 @@ class ProfileScreen extends StatelessWidget {
         title: const Text("Profile"),
         centerTitle: true,
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Text(
               "Profile Screen",
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 /// Dashboard screen with a date row and time-block cards.
 class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -75,19 +75,19 @@ class DashboardScreen extends StatelessWidget {
         Container(
           color: Colors.teal[100],
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
+          child: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: const [
+            children: [
               _DateColumn(dayLabel: 'SAT', dayNumber: '15'),
               _DateColumn(dayLabel: 'SUN', dayNumber: '16'),
               _DateColumn(dayLabel: 'MON', dayNumber: '17'),
             ],
           ),
         ),
-        Expanded(
+        const Expanded(
           child: SingleChildScrollView(
             child: Column(
-              children: const [
+              children: [
                 _TimeBlockCard(
                   blockTitle: 'Morning',
                   subtitle: 'No Habits yet\nTap "+" to add',
@@ -117,8 +117,8 @@ class _DateColumn extends StatelessWidget {
   const _DateColumn({
     required this.dayLabel,
     required this.dayNumber,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -145,8 +145,8 @@ class _TimeBlockCard extends StatelessWidget {
   const _TimeBlockCard({
     required this.blockTitle,
     required this.subtitle,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -166,7 +166,7 @@ class _TimeBlockCard extends StatelessWidget {
 
 /// Placeholder for the Planner screen.
 class PlannerScreen extends StatelessWidget {
-  const PlannerScreen({Key? key}) : super(key: key);
+  const PlannerScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +181,7 @@ class PlannerScreen extends StatelessWidget {
 
 /// Placeholder for the Analytics screen.
 class AnalyticsScreen extends StatelessWidget {
-  const AnalyticsScreen({Key? key}) : super(key: key);
+  const AnalyticsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +196,7 @@ class AnalyticsScreen extends StatelessWidget {
 
 /// Placeholder for the Profile screen.
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -205,10 +205,10 @@ class ProfileScreen extends StatelessWidget {
         title: const Text("Profile"),
         centerTitle: true,
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Text(
               "Profile Screen",
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
