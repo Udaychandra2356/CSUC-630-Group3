@@ -25,6 +25,6 @@
 - [Internal Design](https://docs.google.com/document/d/1o77e0aQM8MId-ny01n-hBcNe4JH4pgo8URsi4KklKXk/edit?usp=sharing)
 - [External Design: Choosing Project UI design](https://docs.google.com/document/d/1N61ji1pEtPXPback4XL5FFPGVS5h_t6zyr92Pk-Kodg/edit?usp=sharing)
 - [Unit Testing](https://docs.google.com/document/d/1gda6nRzGb7_OFW5v-Jnd26IN6n47YF7cexV6N4w1AAA/edit?usp=sharing)
-- [Product Backlog](In progress..)
+- [Product Backlog](https://docs.google.com/document/d/15UWmKzEk7pBzo_2lEM8IaqsUa7c7SspjRgAMp3qx_Pc/edit?tab=t.0#heading=h.felxeffz98s5)
 
 ---
