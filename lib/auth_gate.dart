@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'home_screen.dart';
 
 class AuthGate extends StatelessWidget {
+  const AuthGate({super.key});
+
 
   //const AuthGate({super.key});
  

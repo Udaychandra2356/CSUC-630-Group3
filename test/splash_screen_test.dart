@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:habitstacker/splash_screen.dart';
-import 'package:habitstacker/firebase_options.dart';  // adjust path as needed
+// adjust path as needed
 
 
 void main() {

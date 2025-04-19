@@ -1,223 +1,164 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:habitstacker/add_habit_flow.dart';
+import 'profile_screen.dart';
+import 'planner_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  @override State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-
-  static const List<Widget> _widgetOptions = <Widget>[
+  static const List<Widget> _tabs = [
     DashboardScreen(),
     PlannerScreen(),
     AnalyticsScreen(),
     ProfileScreen(),
   ];
+  void _onTapNav(int i) => setState(() => _selectedIndex = i);
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Habit Stacker'),
-        centerTitle: true,
-      ),
-      body: _widgetOptions.elementAt(_selectedIndex),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Dashboard',
+  void _showCalendar() {
+    final today = DateTime.now();
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Calendar'),
+        content: SizedBox(
+          width: 320,
+          height: 330,
+          child: CalendarDatePicker(
+            initialDate: today,
+            firstDate: today.subtract(const Duration(days: 365)),
+            lastDate: today.add(const Duration(days: 365)),
+            onDateChanged: (_) {},
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Planner',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: 'Analytics',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
+        ),
+        actions:[TextButton(onPressed:()=>Navigator.pop(context), child:const Text('Close'))],
       ),
     );
   }
-}
-
-/// Dashboard screen with a date row and time-block cards.
-class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          color: Colors.teal[100],
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _DateColumn(dayLabel: 'SAT', dayNumber: '15'),
-              _DateColumn(dayLabel: 'SUN', dayNumber: '16'),
-              _DateColumn(dayLabel: 'MON', dayNumber: '17'),
-            ],
-          ),
-        ),
-        const Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                _TimeBlockCard(
-                  blockTitle: 'Morning',
-                  subtitle: 'No Habits yet\nTap "+" to add',
-                ),
-                _TimeBlockCard(
-                  blockTitle: 'Noon',
-                  subtitle: 'No Habits yet\nTap "+" to add',
-                ),
-                _TimeBlockCard(
-                  blockTitle: 'Evening',
-                  subtitle: 'No Habits yet\nTap "+" to add',
-                ),
-              ],
-            ),
-          ),
-        ),
+  Widget build(BuildContext ctx) => Scaffold(
+    appBar: AppBar(
+      title: const Text('Today'), centerTitle: true,
+      leading: IconButton(icon:const Icon(Icons.settings), onPressed: ()=>_onTapNav(3)),
+      actions:[IconButton(icon:const Icon(Icons.calendar_month), onPressed: _showCalendar)],
+    ),
+    body: _tabs[_selectedIndex],
+    floatingActionButton: FloatingActionButton(
+      child: const Icon(Icons.add),
+      onPressed: ()=>Navigator.push(ctx,MaterialPageRoute(builder:(_) => const AddHabitsScreen())),
+    ),
+    floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    bottomNavigationBar: BottomNavigationBar(
+      currentIndex:_selectedIndex,onTap:_onTapNav,type:BottomNavigationBarType.fixed,
+      items:const[
+        BottomNavigationBarItem(icon:Icon(Icons.home),label:'Dashboard'),
+        BottomNavigationBarItem(icon:Icon(Icons.calendar_today),label:'Planner'),
+        BottomNavigationBarItem(icon:Icon(Icons.bar_chart),label:'Analytics'),
+        BottomNavigationBarItem(icon:Icon(Icons.person),label:'Profile'),
       ],
-    );
-  }
+    ),
+  );
 }
 
-/// A widget to display a day label and number.
-class _DateColumn extends StatelessWidget {
-  final String dayLabel;
-  final String dayNumber;
-
-  const _DateColumn({
-    required this.dayLabel,
-    required this.dayNumber,
-    super.key,
+/// ---------------- DASHBOARD TAB ----------------
+class DashboardScreen extends StatefulWidget { const DashboardScreen({super.key}); @override State<DashboardScreen> createState()=>_DashboardScreenState();}
+class _DashboardScreenState extends State<DashboardScreen>{
+  final List<DateTime> _week=List.generate(7,(i){
+    final now=DateTime.now();
+    final monday=now.subtract(Duration(days: now.weekday-1));
+    return monday.add(Duration(days:i));
   });
+  int _dayIdx=DateTime.now().weekday-1;
+  String _label(int i)=>['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][i];
 
   @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          dayLabel,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        Text(
-          dayNumber,
-          style: const TextStyle(fontSize: 16),
-        ),
-      ],
-    );
-  }
+  Widget build(BuildContext ctx)=>Column(children:[
+    Container(
+      color:Colors.teal[100],padding:const EdgeInsets.symmetric(vertical:8),
+      child:Row(
+        mainAxisAlignment:MainAxisAlignment.spaceEvenly,
+        children:List.generate(7,(i)=>GestureDetector(
+          onTap:()=>setState(()=>_dayIdx=i),
+          child:_DateColumn(dayLabel:_label(i),dayNumber:_week[i].day.toString(),isSelected:i==_dayIdx),
+        )),
+      ),
+    ),
+    Expanded(
+      child:StreamBuilder<List<Habit>>(
+        stream:HabitService().habitsForDay(_dayIdx),
+        builder:(_,snap){
+          if(snap.connectionState==ConnectionState.waiting){return const Center(child:CircularProgressIndicator());}
+          final list=snap.data??[];
+          final morning=list.where((h)=>h.targetTime.hour<12).toList();
+          final noon   =list.where((h)=>h.targetTime.hour>=12 && h.targetTime.hour<17).toList();
+          final eve    =list.where((h)=>h.targetTime.hour>=17).toList();
+          return SingleChildScrollView(
+            child:Column(children:[
+              _TimeBlockCard(title:'Morning', habits:morning),
+              _TimeBlockCard(title:'Noon',    habits:noon),
+              _TimeBlockCard(title:'Evening', habits:eve),
+            ]),
+          );
+        },
+      ),
+    ),
+  ]);
 }
 
-/// A card widget for each time block (e.g., Morning, Noon, Evening).
-class _TimeBlockCard extends StatelessWidget {
-  final String blockTitle;
-  final String subtitle;
-
-  const _TimeBlockCard({
-    required this.blockTitle,
-    required this.subtitle,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      elevation: 2,
-      child: ListTile(
-        title: Text(
-          blockTitle,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        subtitle: Text(subtitle),
-      ),
-    );
-  }
+/// --- small helper widgets ---
+class _DateColumn extends StatelessWidget{
+  final String dayLabel,dayNumber; final bool isSelected;
+  const _DateColumn({required this.dayLabel,required this.dayNumber,this.isSelected=false});
+  @override Widget build(BuildContext c)=>Container(
+    padding:const EdgeInsets.symmetric(vertical:4,horizontal:10),
+    decoration:isSelected?BoxDecoration(color:Colors.white,borderRadius:BorderRadius.circular(4),border:Border.all(color:Colors.black26)):null,
+    child:Column(children:[
+      Text(dayLabel,style:const TextStyle(fontWeight:FontWeight.bold)),
+      Text(dayNumber,style:const TextStyle(fontSize:16)),
+    ]),
+  );
 }
 
-/// Placeholder for the Planner screen.
-class PlannerScreen extends StatelessWidget {
-  const PlannerScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Planner Screen',
-        style: Theme.of(context).textTheme.headlineMedium,
-      ),
-    );
-  }
-}
-
-/// Placeholder for the Analytics screen.
-class AnalyticsScreen extends StatelessWidget {
-  const AnalyticsScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'Analytics Screen',
-        style: Theme.of(context).textTheme.headlineMedium,
-      ),
-    );
-  }
-}
-
-/// Placeholder for the Profile screen.
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Profile"),
-        centerTitle: true,
-      ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Profile Screen",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+class _TimeBlockCard extends StatelessWidget{
+  final String title; final List<Habit> habits;
+  const _TimeBlockCard({required this.title,required this.habits});
+  @override Widget build(BuildContext ctx)=>Card(
+    margin:const EdgeInsets.symmetric(horizontal:16,vertical:8),
+    shape:RoundedRectangleBorder(borderRadius:BorderRadius.circular(12)),
+    elevation:1,
+    child:Padding(
+      padding:const EdgeInsets.all(12),
+      child:Column(crossAxisAlignment:CrossAxisAlignment.start,children:[
+        Text(title,style:const TextStyle(fontSize:18,fontWeight:FontWeight.bold)),
+        const SizedBox(height:8),
+        if(habits.isEmpty)
+          Center(child:Text('No Habits yet\ntap “+” to add', textAlign:TextAlign.center,
+            style:TextStyle(color:Colors.purple.shade700,fontWeight:FontWeight.w600,fontSize:16)))
+        else
+          ...habits.map((h)=>InkWell(
+            onTap:()=>Navigator.push(ctx,MaterialPageRoute(builder:(_)=>HabitFormScreen(
+              original:h,presetName:h.name,presetIcon:h.icon,category:h.category))),
+            child:Padding(
+              padding:const EdgeInsets.symmetric(vertical:2),
+              child:Text('${h.icon} ${h.name}',style:const TextStyle(fontSize:16)),
             ),
-            SizedBox(height: 20),
-            SignOutButton(),
-          ],
-        ),
-      ),
-    );
-  }
+          )),
+      ]),
+    ),
+  );
 }
+
+/// --- placeholder tabs ---
+///class PlannerScreen extends StatelessWidget{ const PlannerScreen({super.key});
+///  @override Widget build(BuildContext c)=>Center(child:Text('Planner Screen',style:Theme.of(c).textTheme.headlineMedium));}
+class AnalyticsScreen extends StatelessWidget{ const AnalyticsScreen({super.key});
+  @override Widget build(BuildContext c)=>Center(child:Text('Analytics Screen',style:Theme.of(c).textTheme.headlineMedium));}
+class ProfileScreen extends StatelessWidget{ const ProfileScreen({super.key});
+  @override Widget build(BuildContext c)=>const Scaffold(body:Center(child:Column(
+    mainAxisAlignment:MainAxisAlignment.center,children:[Text('Profile Screen',style:TextStyle(fontSize:24,fontWeight:FontWeight.bold)),SizedBox(height:20),SignOutButton()])));}
+

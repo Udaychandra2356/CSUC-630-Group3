@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:habitstacker/auth_gate.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:mockito/mockito.dart';
-import 'package:habitstacker/firebase_options.dart';  // adjust path as needed
+// adjust path as needed
 
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
-import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'mock.dart';
 
 // // If using mockito, you can create a MockFirebaseAuth, etc.
 // class MockUser extends Mock implements User {}
@@ -33,7 +28,7 @@ void main() async{
     );
 
     await tester.pumpWidget(
-      MaterialApp(
+      const MaterialApp(
         home: AuthGate(),
       ),
     );
