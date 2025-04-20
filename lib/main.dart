@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'splash_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +22,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Habit Stacker',
       theme: ThemeData(
+        textTheme: GoogleFonts.notoSansTextTheme(
+          Theme.of(context).textTheme
+      ),
         primarySwatch: Colors.blue,
+        
       ),
       home: const SplashScreen(),
     );
