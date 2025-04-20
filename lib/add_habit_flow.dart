@@ -42,7 +42,7 @@ class Habit {
       };
 
   factory Habit.fromDoc(DocumentSnapshot doc) {
-    final d = doc.data()! as Map<String, dynamic>;
+    final d = doc.data() as Map<String, dynamic>;
     final parts = (d['targetTime'] as String).split(':');
     return Habit(
       id: doc.id,
@@ -87,11 +87,18 @@ class HabitService {
       .doc(habitId)
       .delete();
 
-  Stream<List<Habit>> habitsForDay(int weekday) => _db
+  Stream<List<Habit>> allHabits() => _db
       .collection('users')
       .doc(_uid)
       .collection('habits')
-      .where('days', arrayContains: weekday)
+      .snapshots()
+      .map((snap) => snap.docs.map(Habit.fromDoc).toList());
+
+  Stream<List<Habit>> habitsForDay(int wd) => _db
+      .collection('users')
+      .doc(_uid)
+      .collection('habits')
+      .where('days', arrayContains: wd)
       .snapshots()
       .map((snap) => snap.docs.map(Habit.fromDoc).toList());
 
@@ -124,7 +131,7 @@ class HabitService {
   }
 }
 
-/// ====================== PRESET DATA (5×10) ============================
+/// ====================== PRESET DATA (5×10+) ============================
 const presetHabits = {
   'Sports': [
     {'name': 'Walk', 'icon': '🚶‍♂️'},
@@ -213,9 +220,9 @@ class AddHabitsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            ...presetHabits.entries.map(
-              (e) => _ExpandableCategory(title: e.key, habits: e.value),
-            ),
+            ...presetHabits.entries
+                .map((e) => _ExpandableCategory(title: e.key, habits: e.value))
+                .toList(),
           ],
         ),
       );
@@ -237,8 +244,7 @@ class _CategoryTile extends StatelessWidget {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: ListTile(
-          title:
-              Center(child: Text(title, style: const TextStyle(fontSize: 18))),
+          title: Center(child: Text(title, style: const TextStyle(fontSize: 18))),
           trailing: trailing,
           onTap: onTap,
         ),
@@ -265,11 +271,10 @@ class _ExpandableCategoryState extends State<_ExpandableCategory> {
         children: [
           _CategoryTile(
             title: widget.title,
-            trailing: Icon(
-              _open ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-            ),
+            trailing:
+                Icon(_open ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
             onTap: () => setState(() => _open = !_open),
-          ),
+          ),  
           if (_open)
             ...widget.habits.map((h) => ListTile(
                   leading: Text(h['icon']!, style: const TextStyle(fontSize: 20)),
@@ -290,7 +295,6 @@ class _ExpandableCategoryState extends State<_ExpandableCategory> {
         ],
       );
 }
-/// ================ HABIT FORM SCREEN ==================
 class HabitFormScreen extends StatefulWidget {
   final Habit? original;
   final String presetName;
@@ -304,7 +308,6 @@ class HabitFormScreen extends StatefulWidget {
     required this.category,
     super.key,
   });
-
   @override
   State<HabitFormScreen> createState() => _HabitFormScreenState();
 }
@@ -338,9 +341,8 @@ class _HabitFormScreenState extends State<HabitFormScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-            title:
-                Text(widget.original == null ? 'New Habit' : 'Edit Habit')),
+        appBar:
+            AppBar(title: Text(widget.original == null ? 'New Habit' : 'Edit Habit')),
         body: Padding(
           padding: const EdgeInsets.all(16),
           child: Form(
@@ -349,20 +351,17 @@ class _HabitFormScreenState extends State<HabitFormScreen> {
               const Text('Name', style: TextStyle(fontWeight: FontWeight.bold)),
               TextFormField(
                 controller: _nameC,
-                validator: (v) =>
-                    v == null || v.trim().isEmpty ? 'Required' : null,
+                validator: (v) => v == null || v.trim().isEmpty ? 'Required' : null,
               ),
               const SizedBox(height: 16),
-              const Text('Description',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Description', style: TextStyle(fontWeight: FontWeight.bold)),
               TextFormField(controller: _descC, maxLines: 2),
               const SizedBox(height: 24),
-              const Text('Repeat on',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Repeat on', style: TextStyle(fontWeight: FontWeight.bold)),
               Wrap(
                 spacing: 4,
                 children: List.generate(7, (i) {
-                  const lbl = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                  const lbl = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
                   final sel = _daysSel.contains(i);
                   return ChoiceChip(
                     label: Text(lbl[i]),
@@ -384,15 +383,13 @@ class _HabitFormScreenState extends State<HabitFormScreen> {
                 final p = await showDatePicker(
                   context: context,
                   initialDate: _startDate,
-                  firstDate:
-                      DateTime.now().subtract(const Duration(days: 365)),
+                  firstDate: DateTime.now().subtract(const Duration(days: 365)),
                   lastDate: DateTime.now().add(const Duration(days: 365)),
                 );
                 if (p != null) setState(() => _startDate = p);
               }),
               _timeRow('Target time', _target, () async {
-                final p =
-                    await showTimePicker(context: context, initialTime: _target);
+                final p = await showTimePicker(context: context, initialTime: _target);
                 if (p != null) setState(() => _target = p);
               }),
               const SizedBox(height: 40),
@@ -400,33 +397,25 @@ class _HabitFormScreenState extends State<HabitFormScreen> {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   backgroundColor: Colors.indigoAccent,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                 ),
                 onPressed: _save,
-                child: Text(
-                  widget.original == null ? 'Save' : 'Update',
-                  style: const TextStyle(fontSize: 18),
-                ),
+                child: Text(widget.original == null ? 'Save' : 'Update',
+                    style: const TextStyle(fontSize: 18)),
               ),
             ]),
           ),
         ),
       );
 
-  Widget _pickerRow(
-          String label, int value, ValueChanged<int?> onChanged) =>
-      Row(
+  Widget _pickerRow(String label, int value, ValueChanged<int?> onChanged) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(child: Text(label)),
           DropdownButton<int>(
             value: value,
             items: List.generate(120, (i) => (i + 1) * 5)
-                .map((e) => DropdownMenuItem(
-                      value: e,
-                      child: Text(e.toString()),
-                    ))
+                .map((e) => DropdownMenuItem(value: e, child: Text(e.toString())))
                 .toList(),
             onChanged: onChanged,
           ),
@@ -437,17 +426,11 @@ class _HabitFormScreenState extends State<HabitFormScreen> {
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(label),
-              Text(
-                '${d.month.toString().padLeft(2, '0')}/${d.day.toString().padLeft(2, '0')}/${d.year}',
-                style: const TextStyle(
-                    color: Colors.purple, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text(label),
+            Text('${d.month.toString().padLeft(2,'0')}/${d.day.toString().padLeft(2,'0')}/${d.year}',
+                style: const TextStyle(color: Colors.purple, fontWeight: FontWeight.bold)),
+          ]),
         ),
       );
 
@@ -455,17 +438,10 @@ class _HabitFormScreenState extends State<HabitFormScreen> {
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(label),
-              Text(
-                t.format(context),
-                style: const TextStyle(
-                    color: Colors.purple, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text(label),
+            Text(t.format(context), style: const TextStyle(color: Colors.purple, fontWeight: FontWeight.bold)),
+          ]),
         ),
       );
 
