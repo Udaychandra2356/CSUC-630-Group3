@@ -12,19 +12,16 @@ class _PlannerScreenState extends State<PlannerScreen> {
   final HabitService _svc = HabitService();
   DateTime _focused = DateTime.now();
   DateTime? _selected;
-  final Map<DateTime, List<Habit>> _events = {};  
+  CalendarFormat _format = CalendarFormat.month;      // ← track current format
+  final Map<DateTime, List<Habit>> _events = {};
 
   List<Habit> _getEventsForDay(DateTime day) {
     final key = DateTime(day.year, day.month, day.day);
     if (_events.containsKey(key)) return _events[key]!;
-
     _svc.habitsOn(key).then((list) {
-      if (mounted) {
-        setState(() => _events[key] = list);
-      }
+      if (mounted) setState(() => _events[key] = list);
     });
-
-    return []; 
+    return [];
   }
 
   @override
@@ -38,6 +35,18 @@ class _PlannerScreenState extends State<PlannerScreen> {
           firstDay: DateTime.utc(2020, 1, 1),
           lastDay: DateTime.utc(2040, 12, 31),
           focusedDay: _focused,
+
+          // ← add these two lines:
+          calendarFormat: _format,
+          onFormatChanged: (fmt) => setState(() => _format = fmt),
+
+          // optional: customize the labels shown in the header button
+          availableCalendarFormats: const {
+            CalendarFormat.month: 'Month',
+            CalendarFormat.twoWeeks: '2 weeks',
+            CalendarFormat.week: 'Week',
+          },
+
           selectedDayPredicate: (d) =>
               _selected != null &&
               d.year == _selected!.year &&
@@ -48,11 +57,10 @@ class _PlannerScreenState extends State<PlannerScreen> {
             markerDecoration:
                 BoxDecoration(color: Colors.indigoAccent, shape: BoxShape.circle),
           ),
-          onDaySelected: (sel, foc) =>
-              setState(() {
-                _selected = sel;
-                _focused = foc;
-              }),
+          onDaySelected: (sel, foc) => setState(() {
+            _selected = sel;
+            _focused = foc;
+          }),
         ),
         const Divider(height: 1),
         Expanded(
@@ -63,22 +71,10 @@ class _PlannerScreenState extends State<PlannerScreen> {
                   itemBuilder: (_, i) {
                     final h = habitsToday[i];
                     return ListTile(
-                      leading:
-                          Text(h.icon, style: const TextStyle(fontSize: 20)),
+                      leading: Text(h.icon, style: const TextStyle(fontSize: 20)),
                       title: Text(h.name),
-                      subtitle: Text(
-                          '${h.targetTime.format(context)}  •  ${h.category}'),
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => HabitFormScreen(
-                            original: h,
-                            presetName: h.name,
-                            presetIcon: h.icon,
-                            category: h.category,
-                          ),
-                        ),
-                      ),
+                      subtitle:
+                          Text('${h.targetTime.format(context)}  •  ${h.category}'),
                     );
                   },
                 ),
