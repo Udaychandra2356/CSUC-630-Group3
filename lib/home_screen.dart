@@ -4,6 +4,7 @@ import 'add_habit_flow.dart';
 import 'time_entry_screen.dart';      
 import 'planner_screen.dart';
 import 'profile_screen.dart';
+import 'manage_habits_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
