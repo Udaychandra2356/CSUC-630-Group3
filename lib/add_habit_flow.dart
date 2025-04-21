@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:habitstacker/auth_singleton.dart';
 
 /// ====================== DATA MODEL ======================
 class Habit {
   String id;
   String name;
-  String icon;       // emoji
+  String icon; // emoji
   String category;
   String description;
-  int minTime;       // minutes
-  int maxTime;       // minutes
+  int minTime; // minutes
+  int maxTime; // minutes
   DateTime startDate;
   TimeOfDay targetTime;
-  List<int> days;    // 0=Mon … 6=Sun
+  List<int> days; // 0=Mon … 6=Sun
 
   Habit({
     required this.id,
@@ -64,14 +65,13 @@ class Habit {
 
 /// ====================== FIRESTORE SERVICE ======================
 class HabitService {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
-  final String _uid = FirebaseAuth.instance.currentUser!.uid;
+  final FirebaseFirestore _db =
+      AuthSingleton().db ?? FirebaseFirestore.instance;
+  final String _uid =
+      (AuthSingleton().auth ?? FirebaseAuth.instance).currentUser!.uid;
 
-  Future<void> createHabit(Habit h) => _db
-      .collection('users')
-      .doc(_uid)
-      .collection('habits')
-      .add(h.toJson());
+  Future<void> createHabit(Habit h) =>
+      _db.collection('users').doc(_uid).collection('habits').add(h.toJson());
 
   Future<void> updateHabit(Habit h) => _db
       .collection('users')
@@ -241,10 +241,10 @@ class _CategoryTile extends StatelessWidget {
   @override
   Widget build(BuildContext ctx) => Card(
         color: Colors.grey.shade300,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: ListTile(
-          title: Center(child: Text(title, style: const TextStyle(fontSize: 18))),
+          title:
+              Center(child: Text(title, style: const TextStyle(fontSize: 18))),
           trailing: trailing,
           onTap: onTap,
         ),
@@ -271,13 +271,14 @@ class _ExpandableCategoryState extends State<_ExpandableCategory> {
         children: [
           _CategoryTile(
             title: widget.title,
-            trailing:
-                Icon(_open ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
+            trailing: Icon(
+                _open ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
             onTap: () => setState(() => _open = !_open),
-          ),  
+          ),
           if (_open)
             ...widget.habits.map((h) => ListTile(
-                  leading: Text(h['icon']!, style: const TextStyle(fontSize: 20)),
+                  leading:
+                      Text(h['icon']!, style: const TextStyle(fontSize: 20)),
                   title: Text(h['name']!),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.push(
@@ -295,6 +296,7 @@ class _ExpandableCategoryState extends State<_ExpandableCategory> {
         ],
       );
 }
+
 class HabitFormScreen extends StatefulWidget {
   final Habit? original;
   final String presetName;
@@ -341,8 +343,8 @@ class _HabitFormScreenState extends State<HabitFormScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar:
-            AppBar(title: Text(widget.original == null ? 'New Habit' : 'Edit Habit')),
+        appBar: AppBar(
+            title: Text(widget.original == null ? 'New Habit' : 'Edit Habit')),
         body: Padding(
           padding: const EdgeInsets.all(16),
           child: Form(
@@ -351,17 +353,20 @@ class _HabitFormScreenState extends State<HabitFormScreen> {
               const Text('Name', style: TextStyle(fontWeight: FontWeight.bold)),
               TextFormField(
                 controller: _nameC,
-                validator: (v) => v == null || v.trim().isEmpty ? 'Required' : null,
+                validator: (v) =>
+                    v == null || v.trim().isEmpty ? 'Required' : null,
               ),
               const SizedBox(height: 16),
-              const Text('Description', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Description',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               TextFormField(controller: _descC, maxLines: 2),
               const SizedBox(height: 24),
-              const Text('Repeat on', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text('Repeat on',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               Wrap(
                 spacing: 4,
                 children: List.generate(7, (i) {
-                  const lbl = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+                  const lbl = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
                   final sel = _daysSel.contains(i);
                   return ChoiceChip(
                     label: Text(lbl[i]),
@@ -389,7 +394,8 @@ class _HabitFormScreenState extends State<HabitFormScreen> {
                 if (p != null) setState(() => _startDate = p);
               }),
               _timeRow('Target time', _target, () async {
-                final p = await showTimePicker(context: context, initialTime: _target);
+                final p = await showTimePicker(
+                    context: context, initialTime: _target);
                 if (p != null) setState(() => _target = p);
               }),
               const SizedBox(height: 40),
@@ -397,7 +403,8 @@ class _HabitFormScreenState extends State<HabitFormScreen> {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   backgroundColor: Colors.indigoAccent,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
                 ),
                 onPressed: _save,
                 child: Text(widget.original == null ? 'Save' : 'Update',
@@ -408,14 +415,16 @@ class _HabitFormScreenState extends State<HabitFormScreen> {
         ),
       );
 
-  Widget _pickerRow(String label, int value, ValueChanged<int?> onChanged) => Row(
+  Widget _pickerRow(String label, int value, ValueChanged<int?> onChanged) =>
+      Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(child: Text(label)),
           DropdownButton<int>(
             value: value,
             items: List.generate(120, (i) => (i + 1) * 5)
-                .map((e) => DropdownMenuItem(value: e, child: Text(e.toString())))
+                .map((e) =>
+                    DropdownMenuItem(value: e, child: Text(e.toString())))
                 .toList(),
             onChanged: onChanged,
           ),
@@ -426,10 +435,13 @@ class _HabitFormScreenState extends State<HabitFormScreen> {
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text(label),
-            Text('${d.month.toString().padLeft(2,'0')}/${d.day.toString().padLeft(2,'0')}/${d.year}',
-                style: const TextStyle(color: Colors.purple, fontWeight: FontWeight.bold)),
+            Text(
+                '${d.month.toString().padLeft(2, '0')}/${d.day.toString().padLeft(2, '0')}/${d.year}',
+                style: const TextStyle(
+                    color: Colors.purple, fontWeight: FontWeight.bold)),
           ]),
         ),
       );
@@ -438,9 +450,12 @@ class _HabitFormScreenState extends State<HabitFormScreen> {
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text(label),
-            Text(t.format(context), style: const TextStyle(color: Colors.purple, fontWeight: FontWeight.bold)),
+            Text(t.format(context),
+                style: const TextStyle(
+                    color: Colors.purple, fontWeight: FontWeight.bold)),
           ]),
         ),
       );

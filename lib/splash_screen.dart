@@ -1,9 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'auth_gate.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
-
+  final FirebaseAuth? auth;
+  const SplashScreen({super.key, this.auth});
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
@@ -15,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) =>  const AuthGate()),
+        MaterialPageRoute(builder: (context) => AuthGate(auth: widget.auth)),
       );
     });
   }

@@ -2,23 +2,25 @@ import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
-
+import 'package:habitstacker/auth_singleton.dart';
 import 'home_screen.dart';
 
 class AuthGate extends StatelessWidget {
-  const AuthGate({super.key});
-
-
-  //const AuthGate({super.key});
- 
+  final FirebaseAuth? auth; // nullable firebase auth to have mocks work.
+  const AuthGate({super.key, this.auth});
 
   @override
   Widget build(BuildContext context) {
+    // if auth isnt passed, createa firebaseauth instance.
+    final FirebaseAuth _auth = auth ?? FirebaseAuth.instance;
+    // Set the auth singleton here!
+    AuthSingleton().auth = _auth;
     return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
+      stream: _auth.authStateChanges(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return SignInScreen(
+            auth: _auth,
             providers: [
               EmailAuthProvider(),
               GoogleProvider(
@@ -29,21 +31,24 @@ class AuthGate extends StatelessWidget {
             headerBuilder: (context, constraints, shrinkOffset) {
               return Padding(
                 padding: const EdgeInsets.all(20),
-                child: Column(
-                  children: [
-                    AspectRatio(
-                      aspectRatio: 1,
-                      child: Image.asset('assets/g-logo.png'),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Habit Stacker',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                // Need to wrap with single child scroll view because render overflow
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      AspectRatio(
+                        aspectRatio: 1,
+                        child: Image.asset('assets/g-logo.png'),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Habit Stacker',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
