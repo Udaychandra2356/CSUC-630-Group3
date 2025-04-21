@@ -22,13 +22,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Habit Stacker',
       theme: ThemeData(
-        textTheme: GoogleFonts.notoSansTextTheme(
-          Theme.of(context).textTheme
-      ),
+        textTheme: GoogleFonts.notoSansTextTheme(Theme.of(context).textTheme),
         primarySwatch: Colors.blue,
-        
       ),
-      home: const SplashScreen(),
+      home: const SplashScreen(auth: null),
     );
   }
 }

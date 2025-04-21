@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'add_habit_flow.dart';          
-import 'time_entry_screen.dart';      
+import 'package:firebase_auth/firebase_auth.dart';
+import 'add_habit_flow.dart';
+import 'time_entry_screen.dart';
 import 'planner_screen.dart';
 import 'profile_screen.dart';
 import 'manage_habits_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -40,7 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Close'))
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Close'))
         ],
       ),
     );
@@ -56,7 +60,9 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () => _onTapNav(3),
           ),
           actions: [
-            IconButton(icon: const Icon(Icons.calendar_month), onPressed: _openCalendar),
+            IconButton(
+                icon: const Icon(Icons.calendar_month),
+                onPressed: _openCalendar),
             IconButton(
               icon: const Icon(Icons.list_alt),
               tooltip: 'Manage Habits',
@@ -81,10 +87,12 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: _onTapNav,
           type: BottomNavigationBarType.fixed,
           items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home),    label: 'Dashboard'),
-            BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Planner'),
-            BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Analytics'),
-            BottomNavigationBarItem(icon: Icon(Icons.person),  label: 'Profile'),
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Dashboard'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.calendar_today), label: 'Planner'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.bar_chart), label: 'Analytics'),
+            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           ],
         ),
       );
@@ -105,7 +113,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   });
   int _dayIdx = DateTime.now().weekday - 1;
 
-  String _label(int i) => ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][i];
+  String _label(int i) => ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i];
 
   @override
   Widget build(BuildContext context) {
@@ -115,14 +123,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: List.generate(7, (i) => GestureDetector(
-                onTap: () => setState(() => _dayIdx = i),
-                child: _DateColumn(
-                  dayLabel: _label(i),
-                  dayNumber: _week[i].day.toString(),
-                  isSelected: i == _dayIdx,
-                ),
-              )),
+          children: List.generate(
+              7,
+              (i) => GestureDetector(
+                    onTap: () => setState(() => _dayIdx = i),
+                    child: _DateColumn(
+                      dayLabel: _label(i),
+                      dayNumber: _week[i].day.toString(),
+                      isSelected: i == _dayIdx,
+                    ),
+                  )),
         ),
       ),
       Expanded(
@@ -140,14 +150,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
               return aMin.compareTo(bMin);
             });
 
-            final morning = habits.where((h) => h.targetTime.hour < 12).toList();
-            final noon    = habits.where((h) => h.targetTime.hour >= 12 && h.targetTime.hour < 17).toList();
-            final evening = habits.where((h) => h.targetTime.hour >= 17).toList();
+            final morning =
+                habits.where((h) => h.targetTime.hour < 12).toList();
+            final noon = habits
+                .where((h) => h.targetTime.hour >= 12 && h.targetTime.hour < 17)
+                .toList();
+            final evening =
+                habits.where((h) => h.targetTime.hour >= 17).toList();
 
             return SingleChildScrollView(
               child: Column(children: [
                 _TimeBlockCard(blockTitle: 'Morning', habits: morning),
-                _TimeBlockCard(blockTitle: 'Noon',    habits: noon),
+                _TimeBlockCard(blockTitle: 'Noon', habits: noon),
                 _TimeBlockCard(blockTitle: 'Evening', habits: evening),
               ]),
             );
@@ -178,15 +192,17 @@ class _DateColumn extends StatelessWidget {
               )
             : null,
         child: Column(children: [
-          Text(dayLabel,  style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(dayLabel, style: const TextStyle(fontWeight: FontWeight.bold)),
           Text(dayNumber, style: const TextStyle(fontSize: 16)),
         ]),
       );
 }
+
 class _TimeBlockCard extends StatelessWidget {
   final String blockTitle;
   final List<Habit> habits;
-  const _TimeBlockCard({required this.blockTitle, required this.habits, super.key});
+  const _TimeBlockCard(
+      {required this.blockTitle, required this.habits, super.key});
 
   @override
   Widget build(BuildContext context) => Card(
@@ -195,9 +211,11 @@ class _TimeBlockCard extends StatelessWidget {
         elevation: 1,
         child: Padding(
           padding: const EdgeInsets.all(12),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(blockTitle,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             if (habits.isEmpty)
               Center(
@@ -237,9 +255,14 @@ class _TimeBlockCard extends StatelessWidget {
 /// placeholders for the other tabs
 class PlannerPlaceholder extends StatelessWidget {
   const PlannerPlaceholder({super.key});
-  @override Widget build(BuildContext c) => const Center(child: Text('Planner (coming soon)'));
+  @override
+  Widget build(BuildContext c) =>
+      const Center(child: Text('Planner (coming soon)'));
 }
+
 class AnalyticsPlaceholder extends StatelessWidget {
   const AnalyticsPlaceholder({super.key});
-  @override Widget build(BuildContext c) => const Center(child: Text('Analytics (coming soon)'));
+  @override
+  Widget build(BuildContext c) =>
+      const Center(child: Text('Analytics (coming soon)'));
 }

@@ -1,3 +1,4 @@
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habitstacker/auth_gate.dart';
@@ -9,14 +10,13 @@ import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 // class MockUser extends Mock implements User {}
 // class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 
-void main() async{
-  
-  //   TestWidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+void main() async {
+  setUpAll(() {
+    setFirebaseUiIsTestMode(true);
+  });
 
-
-
-  testWidgets('AuthGate shows SignInScreen when user is not signed in', (WidgetTester tester) async {
+  testWidgets('AuthGate shows SignInScreen when user is not signed in',
+      (WidgetTester tester) async {
     // In a real test, you'd configure mock FirebaseAuth to return null for currentUser.
 
     final mockAuth = MockFirebaseAuth(
@@ -24,12 +24,12 @@ void main() async{
         uid: 'someUid',
         email: 'someuser@test.com',
       ),
-      signedIn: true,
+      signedIn: false,
     );
 
     await tester.pumpWidget(
-      const MaterialApp(
-        home: AuthGate(),
+      MaterialApp(
+        home: AuthGate(auth: mockAuth),
       ),
     );
 
@@ -37,5 +37,5 @@ void main() async{
     // It might contain sign-in form fields, "Habit Stacker" header, etc.
     expect(find.text('Habit Stacker'), findsOneWidget);
     expect(find.byType(TextFormField), findsWidgets); // Email + password fields
-  }); 
+  });
 }
