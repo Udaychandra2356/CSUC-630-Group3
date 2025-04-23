@@ -37,7 +37,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
   Future<void> _loadAnalytics() async {
     setState(() => _loading = true);
     final uid = AuthSingleton().auth!.currentUser!.uid;
-    final firestore = FirebaseFirestore.instance;
+    final firestore = AuthSingleton().db ?? FirebaseFirestore.instance;
+    // final firestore = FirebaseFirestore.instance;
     final now = DateTime.now();
 
     final habitSnap =
