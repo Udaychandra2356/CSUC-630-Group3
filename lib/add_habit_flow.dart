@@ -210,7 +210,7 @@ class AddHabitsScreen extends StatelessWidget {
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => HabitFormScreen(
+                  builder: (_) => const HabitFormScreen(
                     original: null,
                     presetName: '',
                     presetIcon: '✅',
@@ -222,7 +222,7 @@ class AddHabitsScreen extends StatelessWidget {
             const SizedBox(height: 24),
             ...presetHabits.entries
                 .map((e) => _ExpandableCategory(title: e.key, habits: e.value))
-                .toList(),
+                ,
           ],
         ),
       );

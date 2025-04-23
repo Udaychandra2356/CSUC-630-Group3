@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'add_habit_flow.dart';
 import 'time_entry_screen.dart';
 import 'planner_screen.dart';
-import 'profile_screen.dart';
 import 'manage_habits_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -179,7 +178,6 @@ class _DateColumn extends StatelessWidget {
     required this.dayLabel,
     required this.dayNumber,
     this.isSelected = false,
-    super.key,
   });
   @override
   Widget build(BuildContext context) => Container(
@@ -201,8 +199,7 @@ class _DateColumn extends StatelessWidget {
 class _TimeBlockCard extends StatelessWidget {
   final String blockTitle;
   final List<Habit> habits;
-  const _TimeBlockCard(
-      {required this.blockTitle, required this.habits, super.key});
+  const _TimeBlockCard({required this.blockTitle, required this.habits});
 
   @override
   Widget build(BuildContext context) => Card(

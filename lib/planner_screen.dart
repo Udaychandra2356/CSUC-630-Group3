@@ -53,7 +53,7 @@ class _PlannerScreenState extends State<PlannerScreen> {
               d.month == _selected!.month &&
               d.day == _selected!.day,
           onDaySelected: (sel, foc) =>
-              setState(() => {_selected = sel, _focused = foc}),
+              setState(() {_selected = sel; _focused = foc;}),
           eventLoader: _getEventsForDay,
           calendarStyle: const CalendarStyle(markersMaxCount: 0),
           calendarBuilders: CalendarBuilders(
@@ -67,7 +67,7 @@ class _PlannerScreenState extends State<PlannerScreen> {
                   decoration: BoxDecoration(
                     color: Colors.tealAccent.shade700,
                     shape: BoxShape.circle,
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                         color: Colors.black26,
                         blurRadius: 3,
