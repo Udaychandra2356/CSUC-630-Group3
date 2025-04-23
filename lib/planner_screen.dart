@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:intl/intl.dart'; // ← added
 import 'add_habit_flow.dart';
+import 'time_entry_screen.dart'; // ← added
 
 class PlannerScreen extends StatefulWidget {
-  const PlannerScreen({super.key});
+  const PlannerScreen({Key? key}) : super(key: key);
   @override
-  State<PlannerScreen> createState() => _PlannerScreenState();
+  _PlannerScreenState createState() => _PlannerScreenState();
 }
 
 class _PlannerScreenState extends State<PlannerScreen> {
@@ -24,19 +26,62 @@ class _PlannerScreenState extends State<PlannerScreen> {
     return [];
   }
 
+  void _onDaySelected(DateTime sel, DateTime foc) {
+    setState(() {
+      _selected = sel;
+      _focused = foc;
+    });
+
+    final events = _getEventsForDay(sel);
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        // must return a widget here!
+        if (events.isEmpty) {
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              'No habits scheduled on ${DateFormat('MMM d').format(sel)}',
+              style: const TextStyle(fontSize: 16),
+            ),
+          );
+        }
+        return ListView(
+          padding: const EdgeInsets.all(8),
+          children: events.map((h) {
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: ListTile(
+                leading: Text(h.icon, style: const TextStyle(fontSize: 24)),
+                title: Text(h.name, style: const TextStyle(fontSize: 18)),
+                subtitle: Text(h.targetTime.format(context)),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => TimeEntryScreen(habit: h),
+                    ),
+                  );
+                },
+              ),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final day = _selected ?? _focused;
-    final habitsToday = _getEventsForDay(day)
-      ..sort((a, b) {
-        final aMin = a.targetTime.hour * 60 + a.targetTime.minute;
-        final bMin = b.targetTime.hour * 60 + b.targetTime.minute;
-        return aMin.compareTo(bMin);
-      });
-
-    return Column(
-      children: [
-        TableCalendar<Habit>(
+    return Scaffold(
+      appBar: AppBar(title: const Text('Planner')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: TableCalendar<Habit>(
           firstDay: DateTime.utc(2020, 1, 1),
           lastDay: DateTime.utc(2040, 12, 31),
           focusedDay: _focused,
@@ -52,8 +97,7 @@ class _PlannerScreenState extends State<PlannerScreen> {
               d.year == _selected!.year &&
               d.month == _selected!.month &&
               d.day == _selected!.day,
-          onDaySelected: (sel, foc) =>
-              setState(() {_selected = sel; _focused = foc;}),
+          onDaySelected: _onDaySelected,
           eventLoader: _getEventsForDay,
           calendarStyle: const CalendarStyle(markersMaxCount: 0),
           calendarBuilders: CalendarBuilders(
@@ -87,71 +131,7 @@ class _PlannerScreenState extends State<PlannerScreen> {
             },
           ),
         ),
-        const Divider(height: 1),
-        Expanded(
-          child: habitsToday.isEmpty
-              ? Center(
-                  child: Text(
-                    'No habits scheduled',
-                    style: TextStyle(
-                        fontSize: 16, color: Colors.grey.shade600),
-                  ),
-                )
-              : ListView.builder(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  itemCount: habitsToday.length,
-                  itemBuilder: (context, i) {
-                    final h = habitsToday[i];
-                    return Card(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 6),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
-                      elevation: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 14),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Colors.indigo.shade200,
-                                    Colors.indigo.shade500
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                h.icon,
-                                style: const TextStyle(fontSize: 24),
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Text(
-                                h.name,
-                                style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ),
-                            const Icon(Icons.chevron_right,
-                                color: Colors.grey),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-        ),
-      ],
+      ),
     );
   }
 }
