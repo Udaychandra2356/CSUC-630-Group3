@@ -46,6 +46,8 @@ dependencies:
   google_sign_in_ios: ^5.9.0
   google_sign_in_platform_interface: ^2.5.0
   google_sign_in_web: ^0.12.4+4
+  firebase_storage: ^12.2.0
+  fl_chart: ^0.71.0
 
 dev_dependencies:
   flutter_test:
