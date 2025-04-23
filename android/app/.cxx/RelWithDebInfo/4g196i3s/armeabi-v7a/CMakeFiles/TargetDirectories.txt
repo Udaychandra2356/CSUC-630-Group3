@@ -1,0 +1,2 @@
+/Users/pavan-vault/habitstacker/android/app/.cxx/RelWithDebInfo/4g196i3s/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/pavan-vault/habitstacker/android/app/.cxx/RelWithDebInfo/4g196i3s/armeabi-v7a/CMakeFiles/rebuild_cache.dir

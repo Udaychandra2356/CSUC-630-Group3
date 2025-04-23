@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/pavan-vault/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/pavan-vault/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/pavan-vault/habitstacker/android/app/.cxx/RelWithDebInfo/4g196i3s/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/pavan-vault/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/pavan-vault/habitstacker/android/app/.cxx/RelWithDebInfo/4g196i3s/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}
