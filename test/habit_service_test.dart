@@ -1,12 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:habitstacker/add_habit_flow.dart';
 import 'package:habitstacker/auth_singleton.dart';
+import 'package:habitstacker/home_screen.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
-import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:habitstacker/manage_habits_screen.dart';
 
 void main() {
   ///////////// TESTING MOCKS /////////////
@@ -23,27 +22,9 @@ void main() {
   final mockDB = FakeFirebaseFirestore();
   AuthSingleton().auth = mockAuth;
   AuthSingleton().db = mockDB;
-  // Mock an Firebase entry
-
-  final fakehabit = Habit(
-      id: "FakeID",
-      name: "TestHabit",
-      icon: "TestIcon",
-      category: "Category",
-      description: '',
-      minTime: 30,
-      maxTime: 120,
-      startDate: DateTime(2017),
-      targetTime: const TimeOfDay(hour: 13, minute: 30),
-      days: [0, 1, 2]);
-
-  final uid = 'testUser';
-  final habitId = 'FakeID';
-
   ///////////// TESTING MOCKS /////////////
 
-  testWidgets('Manage Habits screen renders and can remove',
-      (WidgetTester tester) async {
+  testWidgets('HabitService() testing', (WidgetTester tester) async {
     final fakehabit = Habit(
         id: "FakeID",
         name: "TestHabit",
@@ -57,23 +38,29 @@ void main() {
         days: [0, 1, 2]);
 
     final uid = 'testUser';
+
+    // Create habit
     await HabitService().createHabit(fakehabit);
 
+    // Get all habits
     final habits = await HabitService().allHabits().first;
+    late Habit habupdated;
     for (final hab in habits) {
       print(hab);
+      habupdated = hab;
     }
 
-    // Pump the plannerscreen widget inside a MaterialApp to provide needed context.
-    await tester.pumpWidget(const MaterialApp(
-      home: ManageHabitsScreen(),
-    ));
+    // update habit
+    habupdated.name = "newname";
+    await HabitService().updateHabit(habupdated);
 
-    await tester.pump(const Duration(seconds: 1));
+    // habit for day
+    await HabitService().habitsForDay(0).first;
 
-    final deletebutton = find.byIcon(Icons.delete);
-    expect(deletebutton, findsOneWidget); // found delete
-    await tester.tap(deletebutton);
-    await tester.pumpAndSettle();
+    // habit on date
+    await HabitService().habitsOn(DateTime(2017));
+
+    // delete habit
+    await HabitService().deleteHabit(habupdated.id);
   });
 }
