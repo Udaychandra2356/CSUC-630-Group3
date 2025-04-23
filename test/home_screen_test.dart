@@ -1,6 +1,7 @@
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:habitstacker/add_habit_flow.dart';
 import 'package:habitstacker/auth_singleton.dart';
 import 'package:habitstacker/home_screen.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -13,8 +14,8 @@ void main() {
   });
   final mockAuth = MockFirebaseAuth(
     mockUser: MockUser(
-      uid: 'someUid',
-      email: 'someuser@test.com',
+      uid: 'testUser',
+      email: 'testUser@test.com',
     ),
     signedIn: true,
   );
@@ -64,5 +65,42 @@ void main() {
     await tester.tap(sportsfinder);
     await tester.pumpAndSettle();
     expect(find.text('Cycling'), findsOneWidget);
+  });
+
+  testWidgets('homescreen buttons', (WidgetTester tester) async {
+    final fakehabit = Habit(
+        id: "FakeID",
+        name: "TestHabit",
+        icon: "TestIcon",
+        category: "Category",
+        description: '',
+        minTime: 30,
+        maxTime: 120,
+        startDate: DateTime(2017),
+        targetTime: const TimeOfDay(hour: 13, minute: 30),
+        days: [0, 1, 2]);
+
+    final uid = 'testUser';
+    await HabitService().createHabit(fakehabit);
+
+    final habits = await HabitService().allHabits().first;
+    for (final hab in habits) {
+      print(hab);
+    }
+
+    await tester.pumpWidget(const MaterialApp(
+      home: HomeScreen(),
+    ));
+    await tester.pump(const Duration(seconds: 3));
+
+    final timericon = find.byIcon(Icons.timer);
+    expect(timericon, findsOneWidget); // find the timer of the fake habit
+    await tester.tap(timericon);
+    await tester.pumpAndSettle();
+
+    final savebutton = find.text("Save");
+    expect(savebutton, findsOneWidget);
+    await tester.tap(savebutton);
+    await tester.pumpAndSettle();
   });
 }

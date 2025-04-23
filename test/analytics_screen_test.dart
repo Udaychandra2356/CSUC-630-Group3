@@ -1,6 +1,7 @@
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:habitstacker/add_habit_flow.dart';
 import 'package:habitstacker/auth_singleton.dart';
 import 'package:habitstacker/analytics_screen.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -22,21 +23,6 @@ void main() {
   final mockDB = FakeFirebaseFirestore();
   AuthSingleton().auth = mockAuth;
   AuthSingleton().db = mockDB;
-
-  // Mock an Firebase entry
-  final uid = 'testUser';
-  final habitId = 'habit1';
-  final habitDoc =
-      mockDB.collection('users').doc(uid).collection('habits').doc(habitId);
-  // Define your date range
-  final startUtc = DateTime.utc(2024, 1, 1);
-  final endUtc = DateTime.utc(2024, 1, 31);
-  habitDoc.collection('sessions').add({
-    'timestamp': Timestamp.fromDate(DateTime.utc(2024, 1, 5)),
-  });
-  habitDoc.collection('sessions').add({
-    'timestamp': Timestamp.fromDate(DateTime.utc(2024, 2, 1)), // outside range
-  });
   ///////////// TESTING MOCKS /////////////
 
   testWidgets('analytics shows week', (WidgetTester tester) async {
@@ -50,8 +36,6 @@ void main() {
     expect(find.text('Monthly'), findsOneWidget);
     expect(find.text('Yearly'), findsOneWidget);
   });
-
-  ///////////// TESTING MOCKS /////////////
 
   testWidgets('analytics can switch betweent weekly monthly yearly',
       (WidgetTester tester) async {
@@ -71,6 +55,33 @@ void main() {
 
     final yearly = find.text('Yearly');
     await tester.tap(yearly);
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('analytics can display habits', (WidgetTester tester) async {
+    final fakehabit = Habit(
+        id: "FakeID",
+        name: "TestHabit",
+        icon: "TestIcon",
+        category: "Category",
+        description: '',
+        minTime: 30,
+        maxTime: 120,
+        startDate: DateTime(2017),
+        targetTime: const TimeOfDay(hour: 13, minute: 30),
+        days: [0, 1, 2]);
+
+    // Create habit
+    await HabitService().createHabit(fakehabit);
+
+    await tester.pumpWidget(const MaterialApp(
+      home: AnalyticsScreen(),
+    ));
+
+    await tester.pump(const Duration(seconds: 1));
+
+    final thabitbutton = find.text('TestHabit');
+    await tester.tap(thabitbutton);
     await tester.pumpAndSettle();
   });
 }
