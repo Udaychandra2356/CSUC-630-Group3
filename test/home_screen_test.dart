@@ -39,19 +39,30 @@ void main() {
     expect(find.text('Analytics'), findsOneWidget);
     expect(find.text('Profile'), findsOneWidget);
 
-    // NOt implemented yet.
+    // Not implemented yet.
     // // Optionally tap on an item and confirm the UI changes. E.g.:
     // await tester.tap(find.text('Planner'));
     // await tester.pump();
     // expect(find.text('Planner Screen'), findsOneWidget);
   });
 
-  testWidgets('HomeScreen FAB is present', (WidgetTester tester) async {
+  testWidgets('premade habits present', (WidgetTester tester) async {
     await tester.pumpWidget(const MaterialApp(
       home: HomeScreen(),
     ));
 
     // Check for FloatingActionButton.
-    expect(find.byType(FloatingActionButton), findsOneWidget);
+    final FABfinder = find.byType(FloatingActionButton);
+    expect(FABfinder, findsOneWidget);
+
+    await tester.tap(FABfinder);
+    await tester.pumpAndSettle();
+
+    final sportsfinder = find.text('Sports');
+    expect(sportsfinder, findsOneWidget);
+
+    await tester.tap(sportsfinder);
+    await tester.pumpAndSettle();
+    expect(find.text('Cycling'), findsOneWidget);
   });
 }
