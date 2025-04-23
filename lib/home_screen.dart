@@ -5,6 +5,7 @@ import 'add_habit_flow.dart';
 import 'time_entry_screen.dart';
 import 'planner_screen.dart';
 import 'manage_habits_screen.dart';
+import 'analytics_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static const List<Widget> _tabs = [
     DashboardScreen(),
     PlannerScreen(),
-    AnalyticsPlaceholder(),
+    AnalyticsScreen(),
     ProfileScreen(),
   ];
 
