@@ -14,7 +14,7 @@ permissions:
   id-token: write
 
 jobs:
-  flutter_build_test:
+  test:
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
