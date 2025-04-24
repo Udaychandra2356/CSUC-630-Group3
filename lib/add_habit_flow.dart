@@ -117,9 +117,11 @@ class HabitService {
 
   Future<void> logSession({
     required String habitId,
-    required int minutes,
+    int? minutes,
     DateTime? when,
-  }) {
+  }) 
+  
+  {
     final ts = when ?? DateTime.now();
     return _db
         .collection('users')
@@ -129,7 +131,30 @@ class HabitService {
         .collection('sessions')
         .add({'minutes': minutes, 'timestamp': Timestamp.fromDate(ts)});
   }
+   Future<int?> lastSessionMinutes(String habitId, {DateTime? when}) async {
+    final dt = when ?? DateTime.now();
+    final startOfDay = DateTime(dt.year, dt.month, dt.day);
+    final endOfDay = startOfDay.add(const Duration(days: 1));
+
+    final snap = await _db
+        .collection('users')
+        .doc(_uid)
+        .collection('habits')
+        .doc(habitId)
+        .collection('sessions')
+        .where('timestamp',
+            isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
+        .where('timestamp',
+            isLessThan: Timestamp.fromDate(endOfDay))
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .get();
+
+    if (snap.docs.isEmpty) return null;
+    return snap.docs.first.data()['minutes'] as int?;
+  }
 }
+
 
 /// ====================== PRESET DATA (5×10+) ============================
 const presetHabits = {

@@ -159,12 +159,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 habits.where((h) => h.targetTime.hour >= 17).toList();
 
             return SingleChildScrollView(
-              child: Column(children: [
-                _TimeBlockCard(blockTitle: 'Morning', habits: morning),
-                _TimeBlockCard(blockTitle: 'Noon', habits: noon),
-                _TimeBlockCard(blockTitle: 'Evening', habits: evening),
-              ]),
-            );
+  child: Column(children: [
+    _TimeBlockCard(
+      blockTitle: 'Morning',
+      habits: morning,
+      onSessionLogged: () => setState(() {}),
+    ),
+    _TimeBlockCard(
+      blockTitle: 'Noon',
+      habits: noon,
+      onSessionLogged: () => setState(() {}),
+    ),
+    _TimeBlockCard(
+      blockTitle: 'Evening',
+      habits: evening,
+      onSessionLogged: () => setState(() {}),
+    ),
+  ]),
+);
+
           },
         ),
       ),
@@ -200,7 +213,8 @@ class _DateColumn extends StatelessWidget {
 class _TimeBlockCard extends StatelessWidget {
   final String blockTitle;
   final List<Habit> habits;
-  const _TimeBlockCard({required this.blockTitle, required this.habits});
+  final VoidCallback onSessionLogged;
+  const _TimeBlockCard({required this.blockTitle, required this.habits,required this.onSessionLogged,});
 
   @override
   Widget build(BuildContext context) => Card(
@@ -226,24 +240,38 @@ class _TimeBlockCard extends StatelessWidget {
               )
             else
               ...habits.map((h) => ListTile(
-                    leading: Text(
-                      '${h.targetTime.format(context)}  ${h.icon}',
-                      style: const TextStyle(fontSize: 20),
-                    ),
+  leading: FutureBuilder<int?>(
+  future: HabitService().lastSessionMinutes(h.id),
+  builder: (context, snap) {
+    final minutes = snap.data;
+    final txt = (minutes != null) ? '$minutes min ' : '';
+    return Text(
+      '$txt${h.icon}',
+      style: const TextStyle(fontSize: 20),
+    );
+  },
+),
                     title: Text(h.name),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.timer),
-                      onPressed: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => TimeEntryScreen(habit: h)),
-                      ),
-                    ),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => TimeEntryScreen(habit: h)),
-                    ),
+trailing: IconButton(
+  icon: const Icon(Icons.timer),
+  onPressed: () async {
+    // wait for the TimeEntryScreen to pop
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => TimeEntryScreen(habit: h)),
+    );
+    // then rebuild so your FutureBuilder refetches the just-logged minutes
+    onSessionLogged();
+  },
+),
+onTap: () async {
+  await Navigator.push(
+    context,
+    MaterialPageRoute(builder: (_) => TimeEntryScreen(habit: h)),
+  );
+  onSessionLogged();
+},
+
                   )),
           ]),
         ),

@@ -10,44 +10,75 @@ class TimeEntryScreen extends StatefulWidget {
 }
 
 class _TimeEntryScreenState extends State<TimeEntryScreen> {
-  int _minutes = 10;
+  int? _minutes;
+  @override
+  void initState() {
+    super.initState();
+    _loadPrevious();
+  }
+  Future<void> _loadPrevious() async {
+    final prev = await HabitService()
+        .lastSessionMinutes(widget.habit.id, when: DateTime.now());
+    setState(() => _minutes = prev); // remains null if no prior entry
+  }
+Future<void> _handleSave() async {
+    // Record null if the user never picked anything
+    if (_minutes == null) {
+      await HabitService().logSession(
+        habitId: widget.habit.id,
+        minutes: null,
+      );
+      Navigator.pop(context);
+      return;
+    }
 
-  Future<void> _handleSave() async {
     final min = widget.habit.minTime;
     final max = widget.habit.maxTime;
 
     // Under minimum?
-    if (_minutes < min) {
+    if (_minutes! < min) {
       final proceed = await showDialog<bool>(
         context: context,
         builder: (_) => AlertDialog(
           title: const Text("Too little time spent"),
           content: Text(
-            "You logged $_minutes min but the minimum for “${widget.habit.name}” is $min min.\n"
-            "Every minute counts—keep building the habit! Would you still like to save?",
+            "You logged $_minutes min but the minimum for “${widget.habit.name}” is $min min.\n"
+            "Every minute counts—keep building the habit! Save anyway?",
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context, false), child: const Text("Cancel")),
-            ElevatedButton(onPressed: () => Navigator.pop(context, true), child: const Text("Proceed")),
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text("Proceed"),
+            ),
           ],
         ),
       );
       if (proceed != true) return;
     }
 
-    // Over maximum?
-    else if (_minutes > max) {
+    // Above maximum?
+    if (_minutes! > max) {
       final proceed = await showDialog<bool>(
         context: context,
         builder: (_) => AlertDialog(
           title: const Text("Great enthusiasm, but..."),
           content: Text(
-            "You logged $_minutes min but the recommended max for “${widget.habit.name}” is $max min.\n"
+            "You logged $_minutes min but the recommended max for “${widget.habit.name}” is $max min.\n"
             "That’s fantastic—just remember balance, and avoid burnout! Save anyway?",
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context, false), child: const Text("Cancel")),
-            ElevatedButton(onPressed: () => Navigator.pop(context, true), child: const Text("Proceed")),
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text("Proceed"),
+            ),
           ],
         ),
       );
@@ -62,8 +93,17 @@ class _TimeEntryScreenState extends State<TimeEntryScreen> {
     Navigator.pop(context);
   }
 
-  @override
+
+@override
   Widget build(BuildContext context) {
+    final min = widget.habit.minTime;
+    final max = widget.habit.maxTime;
+
+    // Build the list of allowed minute values in 5-min increments
+    final allowedMinutes = <int>[
+      for (int m = min; m <= max; m += 5) m
+    ];
+
     return Scaffold(
       appBar: AppBar(title: Text('Log Time: ${widget.habit.name}')),
       body: Padding(
@@ -71,28 +111,21 @@ class _TimeEntryScreenState extends State<TimeEntryScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Show min/max at top
-            Text(
-              'Required: ${widget.habit.minTime} – ${widget.habit.maxTime} minutes',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
-
-            // Pick minutes
-            const Text('Minutes spent', style: TextStyle(fontWeight: FontWeight.bold)),
+            const Text('Minutes spent',
+                style: TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             DropdownButton<int>(
               value: _minutes,
-              items: List.generate(23, (i) => (i + 1) * 5)
-                  .map((m) => DropdownMenuItem(value: m, child: Text('$m minutes')))
+              hint: const Text('Select minutes'),
+              items: allowedMinutes
+                  .map((m) => DropdownMenuItem(
+                        value: m,
+                        child: Text('$m minutes'),
+                      ))
                   .toList(),
-              onChanged: (v) {
-                if (v != null) setState(() => _minutes = v);
-              },
+              onChanged: (v) => setState(() => _minutes = v),
             ),
             const Spacer(),
-
-            // Save button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
