@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'splash_screen.dart';
+import 'package:habitstacker/auth_singleton.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.notoSansTextTheme(Theme.of(context).textTheme),
         primarySwatch: Colors.blue,
       ),
-      home: const SplashScreen(auth: null),
+      home: SplashScreen(auth: AuthSingleton().auth),
+
     );
   }
 }

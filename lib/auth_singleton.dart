@@ -6,12 +6,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthSingleton {
   static final AuthSingleton _singleton = AuthSingleton._internal();
 
-  late final FirebaseAuth? auth;
+  /// Holds either the real FirebaseAuth.instance or a test‐mock override
+  FirebaseAuth? auth;
+
+  /// Same for Firestore
   FirebaseFirestore? db;
 
-  factory AuthSingleton() {
-    return _singleton;
-  }
+  factory AuthSingleton() => _singleton;
 
-  AuthSingleton._internal();
+  AuthSingleton._internal() {
+    // default to real instances
+    auth = FirebaseAuth.instance;
+    db   = FirebaseFirestore.instance;
+  }
 }
