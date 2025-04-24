@@ -163,16 +163,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _TimeBlockCard(
       blockTitle: 'Morning',
       habits: morning,
+      date: _week[_dayIdx],
       onSessionLogged: () => setState(() {}),
     ),
     _TimeBlockCard(
       blockTitle: 'Noon',
       habits: noon,
+      date: _week[_dayIdx],
       onSessionLogged: () => setState(() {}),
     ),
     _TimeBlockCard(
       blockTitle: 'Evening',
       habits: evening,
+      date: _week[_dayIdx],
       onSessionLogged: () => setState(() {}),
     ),
   ]),
@@ -213,8 +216,9 @@ class _DateColumn extends StatelessWidget {
 class _TimeBlockCard extends StatelessWidget {
   final String blockTitle;
   final List<Habit> habits;
+  final DateTime date;
   final VoidCallback onSessionLogged;
-  const _TimeBlockCard({required this.blockTitle, required this.habits,required this.onSessionLogged,});
+  const _TimeBlockCard({required this.blockTitle, required this.habits,required this.onSessionLogged,required this.date,});
 
   @override
   Widget build(BuildContext context) => Card(
@@ -241,7 +245,7 @@ class _TimeBlockCard extends StatelessWidget {
             else
               ...habits.map((h) => ListTile(
   leading: FutureBuilder<int?>(
-  future: HabitService().lastSessionMinutes(h.id),
+  future: HabitService().lastSessionMinutes(h.id,  when: date),
   builder: (context, snap) {
     final minutes = snap.data;
     final txt = (minutes != null) ? '$minutes min ' : '';
