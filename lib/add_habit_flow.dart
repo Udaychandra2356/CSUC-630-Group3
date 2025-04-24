@@ -119,9 +119,7 @@ class HabitService {
     required String habitId,
     int? minutes,
     DateTime? when,
-  }) 
-  
-  {
+  }) {
     final ts = when ?? DateTime.now();
     return _db
         .collection('users')
@@ -131,7 +129,8 @@ class HabitService {
         .collection('sessions')
         .add({'minutes': minutes, 'timestamp': Timestamp.fromDate(ts)});
   }
-   Future<int?> lastSessionMinutes(String habitId, {DateTime? when}) async {
+
+  Future<int?> lastSessionMinutes(String habitId, {DateTime? when}) async {
     final dt = when ?? DateTime.now();
     final startOfDay = DateTime(dt.year, dt.month, dt.day);
     final endOfDay = startOfDay.add(const Duration(days: 1));
@@ -154,7 +153,6 @@ class HabitService {
     return snap.docs.first.data()['minutes'] as int?;
   }
 }
-
 
 /// ====================== PRESET DATA (5×10+) ============================
 const presetHabits = {
@@ -246,8 +244,7 @@ class AddHabitsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             ...presetHabits.entries
-                .map((e) => _ExpandableCategory(title: e.key, habits: e.value))
-                ,
+                .map((e) => _ExpandableCategory(title: e.key, habits: e.value)),
           ],
         ),
       );
@@ -268,8 +265,7 @@ class _CategoryTile extends StatelessWidget {
         color: Colors.grey.shade300,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: ListTile(
-          title:
-              Center(child: Text(title, style: const TextStyle(fontSize: 18))),
+          title: Center(child: Text(title, style: const TextStyle(fontSize: 18))),
           trailing: trailing,
           onTap: onTap,
         ),
@@ -296,14 +292,13 @@ class _ExpandableCategoryState extends State<_ExpandableCategory> {
         children: [
           _CategoryTile(
             title: widget.title,
-            trailing: Icon(
-                _open ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
+            trailing:
+                Icon(_open ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
             onTap: () => setState(() => _open = !_open),
           ),
           if (_open)
             ...widget.habits.map((h) => ListTile(
-                  leading:
-                      Text(h['icon']!, style: const TextStyle(fontSize: 20)),
+                  leading: Text(h['icon']!, style: const TextStyle(fontSize: 20)),
                   title: Text(h['name']!),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.push(
@@ -386,8 +381,27 @@ class _HabitFormScreenState extends State<HabitFormScreen> {
                   style: TextStyle(fontWeight: FontWeight.bold)),
               TextFormField(controller: _descC, maxLines: 2),
               const SizedBox(height: 24),
+
+              // - - - NEW QUICK-SELECT BUTTONS - - -
               const Text('Repeat on',
                   style: TextStyle(fontWeight: FontWeight.bold)),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: () =>
+                        setState(() => _daysSel = List.generate(5, (i) => i)),
+                    child: const Text('Weekdays'),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () =>
+                        setState(() => _daysSel = List.generate(7, (i) => i)),
+                    child: const Text('Everyday'),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
               Wrap(
                 spacing: 4,
                 children: List.generate(7, (i) {
@@ -403,24 +417,30 @@ class _HabitFormScreenState extends State<HabitFormScreen> {
                 }),
               ),
               const SizedBox(height: 24),
+
               _pickerRow('Minimum time', _minTime, (int? v) {
                 if (v != null) setState(() => _minTime = v);
               }),
+              const SizedBox(height: 16),
               _pickerRow('Maximum time', _maxTime, (int? v) {
                 if (v != null) setState(() => _maxTime = v);
               }),
+              const SizedBox(height: 16),
               _dateRow('Start date', _startDate, () async {
                 final p = await showDatePicker(
                   context: context,
                   initialDate: _startDate,
-                  firstDate: DateTime.now().subtract(const Duration(days: 365)),
-                  lastDate: DateTime.now().add(const Duration(days: 365)),
+                  firstDate:
+                      DateTime.now().subtract(const Duration(days: 365)),
+                  lastDate:
+                      DateTime.now().add(const Duration(days: 365)),
                 );
                 if (p != null) setState(() => _startDate = p);
               }),
+              const SizedBox(height: 16),
               _timeRow('Target time', _target, () async {
-                final p = await showTimePicker(
-                    context: context, initialTime: _target);
+                final p =
+                    await showTimePicker(context: context, initialTime: _target);
                 if (p != null) setState(() => _target = p);
               }),
               const SizedBox(height: 40),
