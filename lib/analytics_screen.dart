@@ -75,12 +75,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   isLessThanOrEqualTo: Timestamp.fromDate(endUtc))
               .get();
           int sum = sessions.docs
-              .fold<int>(0, (p, s) => p + (s.data()['minutes'] as int));
-          if (day.isAfter(now)) {
-            sum = 0; // no credit for future days
-          } else if (sum == 0) {
-            sum = habit.minTime; // auto-credit minTime
-          }
+              .fold<int>(0, (p, s) => p + ((s.data()['minutes'] as int) ?? 0));
+          
           daySum += sum;
           totalPerHabit[habit.name] = (totalPerHabit[habit.name] ?? 0) + sum;
           _habitSeries[habit.name]!.add(sum.toDouble());
@@ -115,8 +111,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   isLessThanOrEqualTo: Timestamp.fromDate(endUtc))
               .get();
           int sum = sessions.docs
-              .fold<int>(0, (p, s) => p + (s.data()['minutes'] as int));
-          if (sum == 0) sum = habit.minTime;
+              .fold<int>(0, (p, s) => p + ((s.data()['minutes'] as int) ?? 0));
+          
           monthSum += sum;
           totalPerHabit[habit.name] = (totalPerHabit[habit.name] ?? 0) + sum;
           _habitSeries[habit.name]!.add(sum.toDouble());
@@ -148,8 +144,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   isLessThanOrEqualTo: Timestamp.fromDate(endUtc))
               .get();
           int sum = sessions.docs
-              .fold<int>(0, (p, s) => p + (s.data()['minutes'] as int));
-          if (sum == 0) sum = habit.minTime;
+              .fold<int>(0, (p, s) => p + ((s.data()['minutes'] as int) ?? 0));
+          
           yearSum += sum;
           totalPerHabit[habit.name] = (totalPerHabit[habit.name] ?? 0) + sum;
           _habitSeries[habit.name]!.add(sum.toDouble());
