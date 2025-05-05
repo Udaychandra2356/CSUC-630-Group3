@@ -1,3 +1,5 @@
+// lib/time_entry_screen.dart
+
 import 'package:flutter/material.dart';
 import 'add_habit_flow.dart';
 
@@ -6,7 +8,7 @@ class TimeEntryScreen extends StatefulWidget {
   const TimeEntryScreen({Key? key, required this.habit}) : super(key: key);
 
   @override
-  _TimeEntryScreenState createState() => _TimeEntryScreenState();
+  State<TimeEntryScreen> createState() => _TimeEntryScreenState();
 }
 
 class _TimeEntryScreenState extends State<TimeEntryScreen> {
@@ -39,8 +41,9 @@ class _TimeEntryScreenState extends State<TimeEntryScreen> {
   Future<void> _handleSave() async {
     final input = _controller.text.trim();
     final custom = int.tryParse(input);
-    final saved = custom != null ? custom : _minutes;
+    int? saved = custom ?? _minutes;
 
+    // if no prior or custom entry, log zero
     if (saved == null) {
       await HabitService().logSession(
         habitId: widget.habit.id,
@@ -58,46 +61,47 @@ class _TimeEntryScreenState extends State<TimeEntryScreen> {
       proceed = await showDialog<bool>(
             context: context,
             builder: (_) => AlertDialog(
-              title: const Text("Below minimum"),
+              title: const Text('Below minimum'),
               content: Text(
-                "You entered $saved min but the minimum for “${widget.habit.name}” is $min min.",
-              ),
+                  'You entered $saved min but the minimum for “${widget.habit.name}” is $min min.'),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context, false),
-                  child: const Text("Cancel"),
+                  child: const Text('Cancel'),
                 ),
                 ElevatedButton(
                   onPressed: () => Navigator.pop(context, true),
-                  child: const Text("Proceed"),
+                  child: const Text('Proceed'),
                 ),
               ],
             ),
-          ) ?? false;
+          ) ??
+          false;
+      if (!proceed) return;
     }
-    if (proceed && saved > max) {
+
+    if (saved > max) {
       proceed = await showDialog<bool>(
             context: context,
             builder: (_) => AlertDialog(
-              title: const Text("Above maximum"),
+              title: const Text('Above maximum'),
               content: Text(
-                "You entered $saved min but the maximum for “${widget.habit.name}” is $max min.",
-              ),
+                  'You entered $saved min but the maximum for “${widget.habit.name}” is $max min.'),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context, false),
-                  child: const Text("Cancel"),
+                  child: const Text('Cancel'),
                 ),
                 ElevatedButton(
                   onPressed: () => Navigator.pop(context, true),
-                  child: const Text("Proceed"),
+                  child: const Text('Proceed'),
                 ),
               ],
             ),
-          ) ?? false;
+          ) ??
+          false;
+      if (!proceed) return;
     }
-
-    if (!proceed) return;
 
     await HabitService().logSession(
       habitId: widget.habit.id,
@@ -139,8 +143,10 @@ class _TimeEntryScreenState extends State<TimeEntryScreen> {
                   child: CircleAvatar(
                     radius: 36,
                     backgroundColor: greenDark,
-                    child: Text(widget.habit.icon,
-                        style: const TextStyle(fontSize: 36, color: Colors.white)),
+                    child: Text(
+                      widget.habit.icon,
+                      style: const TextStyle(fontSize: 36, color: Colors.white),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -148,9 +154,10 @@ class _TimeEntryScreenState extends State<TimeEntryScreen> {
                   child: Text(
                     widget.habit.name,
                     style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: greenDark),
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: greenDark,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -166,9 +173,10 @@ class _TimeEntryScreenState extends State<TimeEntryScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text('Min', style: TextStyle(color: Colors.grey)),
+                              const Text('Min',
+                                  style: TextStyle(color: Colors.grey)),
                               const SizedBox(height: 4),
-                              Text('\$min min',
+                              Text('$min min',
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -180,9 +188,10 @@ class _TimeEntryScreenState extends State<TimeEntryScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              const Text('Max', style: TextStyle(color: Colors.grey)),
+                              const Text('Max',
+                                  style: TextStyle(color: Colors.grey)),
                               const SizedBox(height: 4),
-                              Text('\$max min',
+                              Text('$max min',
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -195,7 +204,8 @@ class _TimeEntryScreenState extends State<TimeEntryScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-                const Text('Preset Times', style: TextStyle(fontWeight: FontWeight.bold)),
+                const Text('Preset Times',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8),
                 Wrap(
                   spacing: 8,
@@ -219,41 +229,43 @@ class _TimeEntryScreenState extends State<TimeEntryScreen> {
                   }).toList(),
                 ),
                 const SizedBox(height: 24),
-                const Text('Or Custom Entry', style: TextStyle(fontWeight: FontWeight.bold)),
+                const Text('Or Custom Entry',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8),
-                TextFormField(
-                  controller: _controller,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    hintText: 'Enter minutes',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8)),
+                Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    controller: _controller,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      hintText: 'Enter minutes',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                    ),
+                    validator: (val) {
+                      if (val == null || val.isEmpty) return null;
+                      final num = int.tryParse(val);
+                      if (num == null) return 'Invalid number';
+                      if (num < min) return 'At least $min';
+                      if (num > max) return 'At most $max';
+                      return null;
+                    },
                   ),
-                  validator: (val) {
-                    if (val == null || val.isEmpty) return null;
-                    final num = int.tryParse(val);
-                    if (num == null) return 'Invalid number';
-                    if (num < min) return 'At least $min';
-                    if (num > max) return 'At most $max';
-                    return null;
-                  },
                 ),
                 const Spacer(),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: greenDark,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  onPressed: () async {
+                  onPressed: () {
                     if (_formKey.currentState?.validate() ?? true) {
-                      await _handleSave();
+                      _handleSave();
                     }
                   },
-                  child: const Text('Save', style: TextStyle(fontSize: 16, color: Colors.white)),
+                  child: const Text('Save', style: TextStyle(fontSize: 18)),
                 ),
               ],
             ),

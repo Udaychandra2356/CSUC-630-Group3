@@ -5,7 +5,7 @@ import 'add_habit_flow.dart';
 import 'time_entry_screen.dart';
 
 class PlannerScreen extends StatefulWidget {
-  const PlannerScreen({Key? key}) : super(key: key);
+  const PlannerScreen({super.key});
   @override
   _PlannerScreenState createState() => _PlannerScreenState();
 }

@@ -1,3 +1,5 @@
+// lib/splash_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'auth_gate.dart';
@@ -5,13 +7,15 @@ import 'auth_gate.dart';
 /// Updated splash screen with larger illustration, gradient,
 /// and navigation into AuthGate.
 class SplashScreen extends StatelessWidget {
+  /// If you pass in an [auth] (for testing/mocking), we'll use that;
+  /// otherwise fall back to the real FirebaseAuth.instance.
   final FirebaseAuth? auth;
   const SplashScreen({Key? key, this.auth}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Use passed-in auth or default to FirebaseAuth.instance
-    final _auth = auth ?? FirebaseAuth.instance;
+    // Create a non-nullable _auth local so we never shadow the field.
+    final FirebaseAuth _auth = auth ?? FirebaseAuth.instance;
 
     return Scaffold(
       body: Container(
@@ -30,7 +34,7 @@ class SplashScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Central AI-generated illustration, enlarged
+            // Central illustration
             Image.asset(
               'assets/Splash_screem_image.png',
               width: 500,
@@ -70,10 +74,8 @@ class SplashScreen extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 60,
-                  vertical: 14,
-                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 60, vertical: 14),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),

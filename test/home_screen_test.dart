@@ -80,7 +80,7 @@ void main() {
         targetTime: const TimeOfDay(hour: 13, minute: 30),
         days: [0, 1, 2]);
 
-    final uid = 'testUser';
+    const uid = 'testUser';
     await HabitService().createHabit(fakehabit);
 
     final habits = await HabitService().allHabits().first;

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habitstacker/add_habit_flow.dart';
 import 'package:habitstacker/auth_singleton.dart';
-import 'package:habitstacker/home_screen.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 

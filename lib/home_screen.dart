@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'add_habit_flow.dart';
 import 'time_entry_screen.dart';
 import 'planner_screen.dart';

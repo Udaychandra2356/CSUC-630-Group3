@@ -12,7 +12,7 @@ class TrackedActivity {
 }
 
 class AnalyticsScreen extends StatefulWidget {
-  const AnalyticsScreen({Key? key}) : super(key: key);
+  const AnalyticsScreen({super.key});
   @override
   State<AnalyticsScreen> createState() => _AnalyticsScreenState();
 }
@@ -211,7 +211,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                   if (_selectedHabit != null)
                     TextButton.icon(
                       icon: const Icon(Icons.arrow_back),
-                      label: Text('All Activities'),
+                      label: const Text('All Activities'),
                       onPressed: () => setState(() => _selectedHabit = null),
                     ),
                   Text('Total: ${_totalMinutes}m',
@@ -238,22 +238,23 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
                             interval: 1,
                             getTitlesWidget: (v, _) {
                               final idx = v.toInt();
-                              if (idx < 0 || idx >= _labels.length)
+                              if (idx < 0 || idx >= _labels.length) {
                                 return const SizedBox();
+                              }
                               return Text(_labels[idx],
                                   style: const TextStyle(fontSize: 10));
                             },
                           ),
                         ),
-                        leftTitles: AxisTitles(
+                        leftTitles: const AxisTitles(
                             sideTitles:
                                 SideTitles(showTitles: true, interval: 60)),
-                        topTitles: AxisTitles(
+                        topTitles: const AxisTitles(
                             sideTitles: SideTitles(showTitles: false)),
-                        rightTitles: AxisTitles(
+                        rightTitles: const AxisTitles(
                             sideTitles: SideTitles(showTitles: false)),
                       ),
-                      gridData: FlGridData(show: true),
+                      gridData: const FlGridData(show: true),
                       borderData: FlBorderData(show: false),
                     )),
                   ),

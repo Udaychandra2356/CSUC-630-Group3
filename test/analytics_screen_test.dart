@@ -6,7 +6,6 @@ import 'package:habitstacker/auth_singleton.dart';
 import 'package:habitstacker/analytics_screen.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() {
   ///////////// TESTING MOCKS /////////////
