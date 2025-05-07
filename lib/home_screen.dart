@@ -85,16 +85,18 @@ class _HomeScreenState extends State<HomeScreen> {
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _selectedIndex,
           onTap: _onTapNav,
+          selectedItemColor: Colors.deepPurple,
+          unselectedItemColor: Colors.grey,
+          backgroundColor: Colors.white,
           type: BottomNavigationBarType.fixed,
           items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Dashboard'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.calendar_today), label: 'Planner'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.bar_chart), label: 'Analytics'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          ],
-        ),
+             BottomNavigationBarItem(icon: Icon(Icons.dashboard), label: 'Dashboard'),
+             BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Planner'),
+             BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Analytics'),
+             BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+  ],
+),
+
       );
 }
 
