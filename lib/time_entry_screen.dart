@@ -47,7 +47,7 @@ class _TimeEntryScreenState extends State<TimeEntryScreen> {
     if (saved == null) {
       await HabitService().logSession(
         habitId: widget.habit.id,
-        minutes: null,
+        minutes: 0, //changed from null to zero
       );
       Navigator.pop(context);
       return;
@@ -248,8 +248,8 @@ class _TimeEntryScreenState extends State<TimeEntryScreen> {
                       if (val == null || val.isEmpty) return null;
                       final num = int.tryParse(val);
                       if (num == null) return 'Invalid number';
-                      //if (num < min) return 'At least $min';
-                      //if (num > max) return 'At most $max';
+                      if (num < min) return 'At least $min'; //uncommented
+                      if (num > max) return 'At most $max';
                       return null;
                     },
                   ),
