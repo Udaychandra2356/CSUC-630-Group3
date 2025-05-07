@@ -259,6 +259,11 @@ class _TimeEntryScreenState extends State<TimeEntryScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: greenDark,
                     padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 3,
+                    shadowColor: Colors.green.shade900,
                   ),
                   onPressed: () {
                     if (_formKey.currentState?.validate() ?? true) {
