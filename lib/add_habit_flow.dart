@@ -262,7 +262,7 @@ class _CategoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext ctx) => Card(
-        color: Colors.grey.shade300,
+        color: Colors.green.shade200,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: ListTile(
           title: Center(child: Text(title, style: const TextStyle(fontSize: 18))),

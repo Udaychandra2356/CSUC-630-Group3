@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext ctx) => Scaffold(
         appBar: AppBar(
-          title: const Text('Today'),
+          //title: const Text('Today'),
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(Icons.settings),
