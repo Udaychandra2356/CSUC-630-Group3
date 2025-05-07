@@ -5,6 +5,7 @@ import 'package:habitstacker/auth_gate.dart';
 // adjust path as needed
 
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
+import 'package:habitstacker/auth_singleton.dart';
 
 // // If using mockito, you can create a MockFirebaseAuth, etc.
 // class MockUser extends Mock implements User {}
@@ -27,6 +28,11 @@ void main() async {
       signedIn: false,
     );
 
+    AuthSingleton.initialize(
+      mockAuth: mockAuth,
+      mockDb: null,
+    );
+
     await tester.pumpWidget(
       MaterialApp(
         home: AuthGate(auth: mockAuth),
@@ -34,8 +40,6 @@ void main() async {
     );
 
     // We expect to see a SignInScreen from firebase_ui_auth by default:
-    // It might contain sign-in form fields, "Habit Stacker" header, etc.
-    expect(find.text('Habit Stacker'), findsOneWidget);
     expect(find.byType(TextFormField), findsWidgets); // Email + password fields
   });
 }

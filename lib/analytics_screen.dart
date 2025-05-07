@@ -36,8 +36,8 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
 
   Future<void> _loadAnalytics() async {
     setState(() => _loading = true);
-    final uid = AuthSingleton().auth!.currentUser!.uid;
-    final firestore = AuthSingleton().db ?? FirebaseFirestore.instance;
+    final uid = AuthSingleton().auth.currentUser!.uid;
+    final firestore = AuthSingleton().db;
     // final firestore = FirebaseFirestore.instance;
     final now = DateTime.now();
 
@@ -76,7 +76,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
               .get();
           int sum = sessions.docs
               .fold<int>(0, (p, s) => p + ((s.data()['minutes'] as int) ?? 0));
-          
+
           daySum += sum;
           totalPerHabit[habit.name] = (totalPerHabit[habit.name] ?? 0) + sum;
           _habitSeries[habit.name]!.add(sum.toDouble());
@@ -112,7 +112,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
               .get();
           int sum = sessions.docs
               .fold<int>(0, (p, s) => p + ((s.data()['minutes'] as int) ?? 0));
-          
+
           monthSum += sum;
           totalPerHabit[habit.name] = (totalPerHabit[habit.name] ?? 0) + sum;
           _habitSeries[habit.name]!.add(sum.toDouble());
@@ -145,7 +145,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen> {
               .get();
           int sum = sessions.docs
               .fold<int>(0, (p, s) => p + ((s.data()['minutes'] as int) ?? 0));
-          
+
           yearSum += sum;
           totalPerHabit[habit.name] = (totalPerHabit[habit.name] ?? 0) + sum;
           _habitSeries[habit.name]!.add(sum.toDouble());

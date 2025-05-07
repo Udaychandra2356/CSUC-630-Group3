@@ -1,6 +1,7 @@
 // lib/time_entry_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'add_habit_flow.dart';
 
 class TimeEntryScreen extends StatefulWidget {
@@ -136,143 +137,154 @@ class _TimeEntryScreenState extends State<TimeEntryScreen> {
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Center(
-                  child: CircleAvatar(
-                    radius: 36,
-                    backgroundColor: greenDark,
-                    child: Text(
-                      widget.habit.icon,
-                      style: const TextStyle(fontSize: 36, color: Colors.white),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Center(
-                  child: Text(
-                    widget.habit.name,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: greenDark,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
-                Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  elevation: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text('Min',
-                                  style: TextStyle(color: Colors.grey)),
-                              const SizedBox(height: 4),
-                              Text('$min min',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: greenDark)),
-                            ],
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints:
+                        BoxConstraints(minHeight: constraints.maxHeight),
+                    child: IntrinsicHeight(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Center(
+                            child: CircleAvatar(
+                              radius: 36,
+                              backgroundColor: greenDark,
+                              child: Text(
+                                widget.habit.icon,
+                                style: const TextStyle(
+                                    fontSize: 36, color: Colors.white),
+                              ),
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              const Text('Max',
-                                  style: TextStyle(color: Colors.grey)),
-                              const SizedBox(height: 4),
-                              Text('$max min',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: greenDark)),
-                            ],
+                          const SizedBox(height: 16),
+                          Center(
+                            child: Text(
+                              widget.habit.name,
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: greenDark,
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 24),
+                          Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
+                            elevation: 2,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Row(
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text('Min',
+                                          style: TextStyle(color: Colors.grey)),
+                                      const SizedBox(height: 4),
+                                      Text('$min min',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: greenDark)),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      const Text('Max',
+                                          style: TextStyle(color: Colors.grey)),
+                                      const SizedBox(height: 4),
+                                      Text('$max min',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: greenDark)),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 24),
+                          const Text('Preset Times',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          const SizedBox(height: 8),
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: presets.map((v) {
+                              final selected = _minutes == v;
+                              return ChoiceChip(
+                                label: Text('$v'),
+                                selected: selected,
+                                backgroundColor: greenAccent,
+                                selectedColor: greenDark,
+                                labelStyle: TextStyle(
+                                    color: selected ? Colors.white : greenDark),
+                                onSelected: (_) {
+                                  setState(() {
+                                    _minutes = v;
+                                    _controller.text = v.toString();
+                                  });
+                                },
+                              );
+                            }).toList(),
+                          ),
+                          const SizedBox(height: 24),
+                          const Text('Or Custom Entry',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                          const SizedBox(height: 8),
+                          Form(
+                            key: _formKey,
+                            child: TextFormField(
+                              controller: _controller,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                hintText: 'Enter minutes',
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8)),
+                              ),
+                              validator: (val) {
+                                if (val == null || val.isEmpty) return null;
+                                final num = int.tryParse(val);
+                                if (num == null) return 'Invalid number';
+                                if (num < min) return 'At least $min';
+                                if (num > max) return 'At most $max';
+                                return null;
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 32),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: greenDark,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 3,
+                              shadowColor: Colors.green.shade900,
+                            ),
+                            onPressed: () {
+                              if (_formKey.currentState?.validate() ?? true) {
+                                _handleSave();
+                              }
+                            },
+                            child: const Text('Save',
+                                style: TextStyle(fontSize: 18)),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 24),
-                const Text('Preset Times',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: presets.map((v) {
-                    final selected = _minutes == v;
-                    return ChoiceChip(
-                      label: Text('$v'),
-                      selected: selected,
-                      backgroundColor: greenAccent,
-                      selectedColor: greenDark,
-                      labelStyle: TextStyle(
-                          color: selected ? Colors.white : greenDark),
-                      onSelected: (_) {
-                        setState(() {
-                          _minutes = v;
-                          _controller.text = v.toString();
-                        });
-                      },
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(height: 24),
-                const Text('Or Custom Entry',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                Form(
-                  key: _formKey,
-                  child: TextFormField(
-                    controller: _controller,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      hintText: 'Enter minutes',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                    ),
-                    validator: (val) {
-                      if (val == null || val.isEmpty) return null;
-                      final num = int.tryParse(val);
-                      if (num == null) return 'Invalid number';
-                      if (num < min) return 'At least $min'; //uncommented
-                      if (num > max) return 'At most $max';
-                      return null;
-                    },
-                  ),
-                ),
-                const Spacer(),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: greenDark,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 3,
-                    shadowColor: Colors.green.shade900,
-                  ),
-                  onPressed: () {
-                    if (_formKey.currentState?.validate() ?? true) {
-                      _handleSave();
-                    }
-                  },
-                  child: const Text('Save', style: TextStyle(fontSize: 18)),
-                ),
-              ],
+                );
+              },
             ),
           ),
         ),

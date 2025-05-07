@@ -16,11 +16,7 @@ class AuthGate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // build a non‐nullable _auth local, without hiding the field
-    final FirebaseAuth _auth = auth ?? FirebaseAuth.instance;
-
-    // update your singleton so the rest of the app can grab it
-    AuthSingleton().auth = _auth;
+    final FirebaseAuth _auth = AuthSingleton().auth;
 
     return StreamBuilder<User?>(
       stream: _auth.authStateChanges(),

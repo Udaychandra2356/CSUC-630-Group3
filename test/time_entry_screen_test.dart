@@ -1,6 +1,8 @@
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:habitstacker/add_habit_flow.dart';
+import 'package:habitstacker/auth_singleton.dart';
 import 'package:habitstacker/time_entry_screen.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
@@ -16,13 +18,17 @@ void main() {
       uid: 'someUid',
       email: 'someuser@test.com',
     ),
-    signedIn: false,
+    signedIn: true,
+  );
+  final mockDB = FakeFirebaseFirestore();
+  AuthSingleton.initialize(
+    mockAuth: mockAuth,
+    mockDb: mockDB,
   );
 
   ///////////// TESTING MOCKS /////////////
 
-  testWidgets('SplashScreen renders logo and text',
-      (WidgetTester tester) async {
+  testWidgets('Time entry screen rendering test', (WidgetTester tester) async {
     final fakehabit = Habit(
         id: "FakeID",
         name: "TestHabit",
