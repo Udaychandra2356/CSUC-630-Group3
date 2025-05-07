@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:habitstacker/auth_singleton.dart';
 import 'package:habitstacker/splash_screen.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
@@ -17,15 +18,19 @@ void main() {
     ),
     signedIn: false,
   );
-
+  AuthSingleton.initialize(
+    mockAuth: mockAuth,
+    mockDb: null,
+  );
   ///////////// TESTING MOCKS /////////////
 
   testWidgets('SplashScreen renders logo and text',
       (WidgetTester tester) async {
     // Pump the SplashScreen widget inside a MaterialApp to provide needed context.
     await tester.pumpWidget(MaterialApp(
-      home: SplashScreen(auth: mockAuth),
-    ));
+        home: MediaQuery(
+            data: const MediaQueryData(size: Size(360, 800)),
+            child: SplashScreen(auth: mockAuth))));
 
     // Look for the app logo image.
     expect(find.byType(Image), findsOneWidget);

@@ -31,67 +31,68 @@ class SplashScreen extends StatelessWidget {
             ],
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Central illustration
-            Image.asset(
-              'assets/Splash_screem_image.png',
-              width: 500,
-              height: 500,
-              fit: BoxFit.contain,
-            ),
-            const SizedBox(height: 32),
-            const Text(
-              'Habit Stacker',
-              style: TextStyle(
-                fontFamily: 'Montserrat',
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Central illustration
+              Image.asset(
+                'assets/Splash_screem_image.png',
+                width: 500,
+                height: 500,
+                fit: BoxFit.contain,
               ),
-            ),
-            const SizedBox(height: 12),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 32),
-              child: Text(
-                'Build better habits, one stack at a time',
-                textAlign: TextAlign.center,
+              const SizedBox(height: 32),
+              const Text(
+                'Habit Stacker',
                 style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 16,
+                  fontFamily: 'Montserrat',
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
-            ),
-            const SizedBox(height: 48),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (_) => AuthGate(auth: _auth),
+              const SizedBox(height: 12),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 32),
+                child: Text(
+                  'Build better habits, one stack at a time',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
                   ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 60, vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              child: const Text(
-              'Get Started',
-              style: TextStyle(
-               color: Color(0xFF2575FC),
-                fontSize: 18,
-             fontWeight: FontWeight.w600,
-     
-                letterSpacing: 1.1,
+              const SizedBox(height: 48),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => AuthGate(auth: _auth),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 60, vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                child: const Text(
+                  'Get Started',
+                  style: TextStyle(
+                    color: Color(0xFF2575FC),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1.1,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

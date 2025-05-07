@@ -21,8 +21,10 @@ void main() {
     signedIn: true,
   );
   final mockDB = FakeFirebaseFirestore();
-  AuthSingleton().auth = mockAuth;
-  AuthSingleton().db = mockDB;
+  AuthSingleton.initialize(
+    mockAuth: mockAuth,
+    mockDb: mockDB,
+  );
   // Mock an Firebase entry
 
   final fakehabit = Habit(

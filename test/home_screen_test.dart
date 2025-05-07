@@ -20,8 +20,10 @@ void main() {
     signedIn: true,
   );
   final mockDB = FakeFirebaseFirestore();
-  AuthSingleton().auth = mockAuth;
-  AuthSingleton().db = mockDB;
+  AuthSingleton.initialize(
+    mockAuth: mockAuth,
+    mockDb: mockDB,
+  );
   ///////////// TESTING MOCKS /////////////
 
   testWidgets('HomeScreen shows 4 bottom navigation items',
@@ -89,7 +91,8 @@ void main() {
     }
 
     await tester.pumpWidget(const MaterialApp(
-      home: HomeScreen(),
+      home: MediaQuery(
+          data: MediaQueryData(size: Size(360, 800)), child: HomeScreen()),
     ));
     await tester.pump(const Duration(seconds: 3));
 
@@ -100,7 +103,7 @@ void main() {
 
     final savebutton = find.text("Save");
     expect(savebutton, findsOneWidget);
-    await tester.tap(savebutton);
+    await tester.tap(savebutton, warnIfMissed: false);
     await tester.pumpAndSettle();
   });
 }

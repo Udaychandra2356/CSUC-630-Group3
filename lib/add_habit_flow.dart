@@ -65,10 +65,8 @@ class Habit {
 
 /// ====================== FIRESTORE SERVICE ======================
 class HabitService {
-  final FirebaseFirestore _db =
-      AuthSingleton().db ?? FirebaseFirestore.instance;
-  final String _uid =
-      (AuthSingleton().auth ?? FirebaseAuth.instance).currentUser!.uid;
+  final FirebaseFirestore _db = AuthSingleton().db;
+  final String _uid = (AuthSingleton().auth).currentUser!.uid;
 
   Future<void> createHabit(Habit h) =>
       _db.collection('users').doc(_uid).collection('habits').add(h.toJson());
@@ -143,8 +141,7 @@ class HabitService {
         .collection('sessions')
         .where('timestamp',
             isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay))
-        .where('timestamp',
-            isLessThan: Timestamp.fromDate(endOfDay))
+        .where('timestamp', isLessThan: Timestamp.fromDate(endOfDay))
         .orderBy('timestamp', descending: true)
         .limit(1)
         .get();
@@ -265,7 +262,8 @@ class _CategoryTile extends StatelessWidget {
         color: Colors.green.shade200,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: ListTile(
-          title: Center(child: Text(title, style: const TextStyle(fontSize: 18))),
+          title:
+              Center(child: Text(title, style: const TextStyle(fontSize: 18))),
           trailing: trailing,
           onTap: onTap,
         ),
@@ -292,13 +290,14 @@ class _ExpandableCategoryState extends State<_ExpandableCategory> {
         children: [
           _CategoryTile(
             title: widget.title,
-            trailing:
-                Icon(_open ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
+            trailing: Icon(
+                _open ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
             onTap: () => setState(() => _open = !_open),
           ),
           if (_open)
             ...widget.habits.map((h) => ListTile(
-                  leading: Text(h['icon']!, style: const TextStyle(fontSize: 20)),
+                  leading:
+                      Text(h['icon']!, style: const TextStyle(fontSize: 20)),
                   title: Text(h['name']!),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () => Navigator.push(
@@ -430,17 +429,15 @@ class _HabitFormScreenState extends State<HabitFormScreen> {
                 final p = await showDatePicker(
                   context: context,
                   initialDate: _startDate,
-                  firstDate:
-                      DateTime.now().subtract(const Duration(days: 365)),
-                  lastDate:
-                      DateTime.now().add(const Duration(days: 365)),
+                  firstDate: DateTime.now().subtract(const Duration(days: 365)),
+                  lastDate: DateTime.now().add(const Duration(days: 365)),
                 );
                 if (p != null) setState(() => _startDate = p);
               }),
               const SizedBox(height: 16),
               _timeRow('Target time', _target, () async {
-                final p =
-                    await showTimePicker(context: context, initialTime: _target);
+                final p = await showTimePicker(
+                    context: context, initialTime: _target);
                 if (p != null) setState(() => _target = p);
               }),
               const SizedBox(height: 40),
